@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "./node_modules/.bin/babel src -d lib",
+    "build": "npm run tsc && rm -rf lib && ./node_modules/.bin/babel src --out-file lib/bundle.js",
     "test": "test",
-    "dev": "node_modules/.bin/webpack-dev-server"
+    "tsc": "tsc -p tsconfig.json",
+    "dev-server": "node_modules/.bin/webpack-dev-server",
+    "watch": "tsc --watch"
   },
   "author": "Denise Wiedl <dlw405@gmail.com>",
   "license": "ISC",
@@ -21,6 +23,9 @@
     "@babel/preset-env": "^7.10.4",
     "@babel/preset-react": "^7.10.4",
     "@babel/preset-typescript": "^7.10.4",
+    "@types/react": "^16.9.43",
+    "@types/react-dom": "^16.9.8",
+    "@types/react-redux": "^7.1.9",
     "babel-loader": "^8.1.0",
     "css-loader": "^4.0.0",
     "html-webpack-plugin": "^4.3.0",
