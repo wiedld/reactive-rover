@@ -249,7 +249,8 @@ class Robot {
         const visited: Array<Array<typeof visitedNode>> = [...Array(PhysicalWorld.WORLD.length)]
             .map(_ => Array(PhysicalWorld.WORLD[0].length));
 
-        const toVisit: {[cost: number]: Array<Location> } = {}; // will be keyed by [estimatedCostToGoal]
+        // cost gets stringified (on key creation)
+        const toVisit: {[cost: string]: Array<Location> } = {}; // will be keyed by [estimatedCostToGoal]
 
         const notYetVisited = ([x,y]: Location) => visited[y][x] == undefined;
         const estimateBtwnLoc = ([x,y]: Location, [x1,y1]: Location) => Math.abs(x1-x) + Math.abs(y1-y);
@@ -321,12 +322,11 @@ class Robot {
                 const options = Object.keys(toVisit);
                 if (options.length == 0) return null;
 
-                const toFind: { minCost: number, toVisitKey: number | null, nextLoc: Location | null }
+                const toFind: { minCost: number, toVisitKey: string | null, nextLoc: Location | null }
                      = { minCost: Infinity, toVisitKey: null, nextLoc: null };
 
                 const { toVisitKey, nextLoc } = options.sort((a,b) => a < b ? -1 : 1)
-                    .reduce((acc, cost) => {
-                        let nodeToGoal = parseInt(cost);
+                    .reduce((acc, nodeToGoal) => {
                         toVisit[nodeToGoal].forEach(locN => {
                             let [x,y] = locN;
                             const totalCost = calcCost(locN, loc);
