@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "test",
-    "app": "node src/server/index.js"
+    "start": "node src/server/index.js"
   },
   "author": "Denise Wiedl <dlw405@gmail.com>",
   "license": "ISC",

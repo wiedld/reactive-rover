@@ -41,5 +41,8 @@ module.exports = {
       new webpack.ProgressPlugin(),
       new HtmlWebpackPlugin({template: './src/index.html'})
     ],
-    mode: 'development'
+    mode: 'development',
+    resolve: {
+      extensions: ['.ts', '.tsx', '.json']
+    }
   }
