@@ -243,6 +243,15 @@ class Robot {
             - `nextTileOkay` function, restricts what parts of the world can be planned.
         Returns:
             - an array of directions [N, W, W, S, S], or bool true.
+        
+        Caveat:
+            - not a proper A* in terms of big O,
+                because the lookup into the toVisit is not a single priority queue (keyed by cost).
+            - since we are re-using the same aStar algorithm in BOTH physical exploration & pre-planning,
+                we need to consider the different costs in backtracking.
+            - to make a real AStar:
+                    - `toVisit` would be a priority queue
+                    - the `calcCost()` func would produce the key/cost used in the prio queue
     */
     _aStar (goal: Location, nextTileIsOkay: (x: Location) => boolean, planningOnly: boolean) {
         // Array<Array<typeof visitedNode>>
