@@ -4,10 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npm run tsc && rm -rf lib && ./node_modules/.bin/babel src --out-file lib/bundle.js",
+    "build": "npm run compile && webpack --config webpack.config.js --watch",
+    "compile": "npm run tsc && rm -rf lib && ./node_modules/.bin/babel src --out-file lib/bundle.js",
+    "start:dev": "npm run build && node_modules/.bin/webpack-dev-server --mode development",
     "test": "test",
     "tsc": "tsc -p tsconfig.json",
-    "dev-server": "node_modules/.bin/webpack-dev-server",
     "watch": "tsc --watch"
   },
   "author": "Denise Wiedl <dlw405@gmail.com>",

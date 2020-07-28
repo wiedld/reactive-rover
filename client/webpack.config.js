@@ -9,11 +9,12 @@ module.exports = {
     },
     output: {
       path: path.resolve(__dirname, 'lib'),
-      filename: '[name].js'
+      filename: 'bundle.js'
     },
     devServer: {
-      contentBase: './lib',
-      hot: true
+      contentBase: path.resolve(__dirname, 'lib'),
+      hot: true,
+      port: 8080
     },
     devtool: 'cheap-module-eval-source-map',
     module: {
