@@ -42,7 +42,11 @@ const Grid = injectSheet(styles)(({
             {[...Array(yAxis).keys()].map(y => {
                 return (
                     <Row key={y} order={y}>
-                        {[...Array(xAxis).keys()].map(x => <Col key={x} order={x}><Tile terrain={world[y][x]} /></Col>)}
+                        {[...Array(xAxis).keys()].map(x => (
+                            <Col key={x} order={x}>
+                                <Tile location={[x,y]} terrain={world[y][x]} />
+                            </Col>)
+                        )}
                     </Row>
                 );
             })}

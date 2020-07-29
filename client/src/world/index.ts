@@ -35,8 +35,8 @@ export default class PhysicalWorld {
     }
 
     constructor (x: number, y: number) {
-        this._objects = Array(5).fill(0)
-            .map((_) => Array(5).fill(0));
+        this._objects = Array(y).fill(0)
+            .map((_) => Array(x).fill(0));
         this.worldMap = createWorld(x,y);
     }
 

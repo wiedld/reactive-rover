@@ -1,7 +1,8 @@
 import React from 'react';
 import injectSheet, { WithStylesProps } from 'react-jss';
 import classNames from 'classnames';
-import { Terrian } from '../global-types';
+import { Location, Terrian } from '../global-types';
+import { buildTileId } from './utils';
 // @ts-ignore
 import Canyon from '../../public/canyon-1.svg';
 // @ts-ignore
@@ -9,6 +10,7 @@ import Mountain from '../../public/mountains.svg';
 
 
 interface TileProps {
+    location: Location;
     terrain: Terrian
 }
 
@@ -35,6 +37,7 @@ type StyledProps = WithStylesProps<typeof styles> & TileProps;
 
 const Tile = injectSheet(styles)(({
     classes,
+    location,
     terrain
 }: StyledProps) => {
     const img = terrain == Terrian.C
@@ -44,7 +47,7 @@ const Tile = injectSheet(styles)(({
             : null;
 
     return (
-        <div className={classes.tile}>
+        <div className={classes.tile} id={buildTileId(location)}>
             <img
                 className={classNames(classes.img, !img ? classes.blank : '')}
                 src={img || Canyon}
