@@ -1,4 +1,6 @@
 import RobotLogic from './logic';
-import { RobotRenderFun } from './ui';
+import Mixin from './mixin';
 
-export default Object.assign(RobotLogic, RobotRenderFun);
+export type RobotType = typeof RobotLogic.prototype & typeof Mixin;
+
+export default RobotLogic;

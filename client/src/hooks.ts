@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PhysicalWorld from './world';
-import Robot from './robot/logic';
+import Robot, { RobotType } from './robot';
 import { createDefaultRobot } from './robot/utils';
 import { Location } from './global-types';
 
@@ -18,23 +18,18 @@ export function useWorld(): [PhysicalWorld, (n: number) => void] {
 
 export function buildRobot (world: PhysicalWorld) {
     const [robot, setRobot] = useState(createDefaultRobot(world));
-    const collection: Array<Robot> = [];
+    const collection: Array<RobotType> = [];
 
     useEffect(() => {
-        // robot.renderInUI(robot.location);
-
-        return () => {
-            let r;
-            while (collection.length) {
-                r = collection.shift();
-                // r && r.removeFromUI();
-            }
-        };
+        // @ts-ignore
+        robot.renderInUI(robot.location);
     });
 
     const newRobot = useCallback(
         () => {
             const r = createDefaultRobot(world);
+
+            // @ts-ignore
             collection.push(robot);
             setRobot(r);
             console.log('COLLECTION', collection);

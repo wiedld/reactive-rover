@@ -50,6 +50,8 @@ const Controls = injectSheet(styles)(({
     const [x, setX] = useState(1);
     const [y, setY] = useState(1);
 
+    const transformLocToZeroIndexing = ([x,y]: Location): Location => ([x-1,y-1]);
+
     return (
         <div className={classes.container}>
             <form onSubmit={e => { e.preventDefault(); newWorld(size); }}>
@@ -59,7 +61,7 @@ const Controls = injectSheet(styles)(({
                 </label>
                 <input type="submit" value="Build World" className={classes.but} />
             </form>
-            <form onSubmit={e => { e.preventDefault(); !!moveToLoc && moveToLoc([x,y]); }} >
+            <form onSubmit={e => { e.preventDefault(); !!moveToLoc && moveToLoc(transformLocToZeroIndexing([x,y])); }} >
                 <label>
                     Move Rover To:
                     <input

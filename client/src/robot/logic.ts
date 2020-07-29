@@ -1,9 +1,10 @@
 import { Command, Direction, Location, World } from '../global-types';
 import PhysicalWorld from '../world';
+import RobotRenderFun from './mixin';
 
 const STATUS_CODES = ['OK', 'OBSTACLE', 'INVALID_COMMAND'];
 
-export default class Robot {
+class Robot {
     static ObstacleException = 1;
     static InvalidCmdException = 2;
     // ordered for mod math (rotating robot)
@@ -349,3 +350,6 @@ export default class Robot {
         .map(x => ({ ...x, dir: Robot.orderedDir[x.dir] }))[0];
     }
 }
+
+Object.assign(Robot.prototype, RobotRenderFun);
+export default Robot;
