@@ -1,7 +1,8 @@
 // @ts-nocheck
 import mocha from "mocha";
 import { expect } from "chai";
-import { PhysicalWorld, Robot } from "../src/robot/index";
+import Robot from "../src/robot";
+import PhysicalWorld from '../src/world';
 
 describe('Mars Robot', function() {
     let rover1 = null, rover2 = null, rover3 = null;
