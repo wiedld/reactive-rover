@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PhysicalWorld from './world';
-import Robot from './robot';
+import Robot from './robot/logic';
 import { createDefaultRobot } from './robot/utils';
 import { Location } from './global-types';
 
