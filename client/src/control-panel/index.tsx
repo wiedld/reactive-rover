@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import injectSheet, { WithStylesProps } from 'react-jss';
 import classNames from 'classnames';
+import { Dispatch } from '../hooks';
 
 interface ControlsProps {
+    maxLoc: number;
+    newWorld: (e: number) => void;
+    // moveToLoc: Dispatch;
 }
 
 const styles = {
@@ -31,24 +35,43 @@ type StyledProps = WithStylesProps<typeof styles> & ControlsProps;
 
 
 const Controls = injectSheet(styles)(({
-    classes
+    classes,
+    maxLoc,
+    newWorld,
+    // moveToLoc
 }: StyledProps) => {
 
     const t = () => {};
 
+    const [size, setSize] = useState(0);
+    const [x, setX] = useState(1);
+    const [y, setY] = useState(1);
+
     return (
         <div className={classes.container}>
-            <form onSubmit={t}>
+            <form onSubmit={e => { e.preventDefault(); newWorld(size); }}>
                 <label>
                     Size of Grid:
-                    <input type="number" name="world size" />
+                    <input type="number" name="world size" onChange={e => setSize(parseInt(e.target.value))} />
                 </label>
+                <input type="submit" value="Build World" className={classes.but} />
             </form>
             <form onSubmit={t}>
                 <label>
                     Move Rover To:
-                    <input type="number" name="X axis" placeholder="X axis" />
-                    <input type="number" name="Y axis" placeholder="Y axis" />
+                    <input
+                        type="number"
+                        name="X axis"
+                        min="1" max={maxLoc}
+                        placeholder="X axis"
+                        onChange={e => setX(parseInt(e.target.value))} />
+                    <input
+                        type="number"
+                        name="Y axis"
+                        min="1"
+                        max={maxLoc}
+                        placeholder="Y axis"
+                        onChange={e => setY(parseInt(e.target.value))} />
                 </label>
                 <input type="submit" value="Move Rover" className={classes.but} />
             </form>

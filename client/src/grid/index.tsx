@@ -12,7 +12,6 @@ interface GridProps {
 
 const styles = {
     grid: {
-        backgroundImage: 'linear-gradient(to right, #6f845b, #badd99)',
         display: 'flex',
         flexDirection: 'column',
         flexWrap: 'nowrap',
@@ -21,7 +20,8 @@ const styles = {
         top: '0',
         bottom: '0',
         left: '0',
-        right: '0'
+        right: '0',
+        padding: '8%'
     }
 };
 type StyledProps = WithStylesProps<typeof styles> & GridProps;

@@ -13,16 +13,20 @@ interface TileProps {
 }
 
 const styles = {
+    blank: {
+        opacity: '0%'
+    },
     img: {
-        position: 'absolute',
         margins: 'auto',
-        height: '50px',
-        width: '50px'
+        maxWidth: '100%',
+        maxHeight: '100%',
+        objectFit: 'contain'
     },
     tile: {
-        boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 50px 0 rgba(0, 0, 0, 0.29)',
+        backgroundImage: 'linear-gradient(to right, #6f845b, #badd99)',
+        boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.29)',
         flex: '1 1 auto',
-        padding: '30%'
+        padding: '20%'
     }
 };
 type StyledProps = WithStylesProps<typeof styles> & TileProps;
@@ -41,7 +45,10 @@ const Tile = injectSheet(styles)(({
 
     return (
         <div className={classes.tile}>
-            {img ? <img className={classes.img} src={img} /> : null}
+            <img
+                className={classNames(classes.img, !img ? classes.blank : '')}
+                src={img || Canyon}
+            />
         </div>
     );
 });
