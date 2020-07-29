@@ -10,7 +10,6 @@ const babelPresets = [
 const babelPlugins = [
   ['@babel/plugin-proposal-class-properties', { allowNamespaces: true }],
   '@babel/plugin-proposal-object-rest-spread',
-  // '@babel/plugin-proposal-decorators',
   '@babel/plugin-syntax-dynamic-import'
 ];
 
