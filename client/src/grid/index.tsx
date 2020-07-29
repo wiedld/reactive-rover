@@ -12,13 +12,16 @@ interface GridProps {
 
 const styles = {
     grid: {
+        backgroundImage: 'linear-gradient(to right, #6f845b, #badd99)',
         display: 'flex',
         flexDirection: 'column',
         flexWrap: 'nowrap',
-        height: '100%',
         justifyContent: 'space-evenly',
-        position: 'relative',
-        width: '100%'
+        position: 'absolute',
+        top: '0',
+        bottom: '0',
+        left: '0',
+        right: '0'
     }
 };
 type StyledProps = WithStylesProps<typeof styles> & GridProps;
@@ -34,10 +37,10 @@ const Grid = injectSheet(styles)(({
         className={classes.grid}
         {...props}
     >
-        {[...Array(yAxis).keys()].map(rowKey => {
+        {[...Array(yAxis).keys()].map(y => {
             return (
-                <Row order={rowKey}>
-                    {[...Array(xAxis).keys()].map(o => <Col key={o} order={o}><Tile /></Col>)}
+                <Row key={y} order={y}>
+                    {[...Array(xAxis).keys()].map(x => <Col key={x} order={x}><Tile x={x} y={y} /></Col>)}
                 </Row>
             );
         })}

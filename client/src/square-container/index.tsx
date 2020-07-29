@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import injectSheet, { WithStylesProps } from 'react-jss';
 import classNames from 'classnames';
-import Grid from '../grid';
 
 const styles = {
     root: {
@@ -14,16 +13,14 @@ const styles = {
 type StyledProps = WithStylesProps<typeof styles>;
 
 
-const Root = injectSheet(styles)(({
+const SquareContainer = injectSheet(styles)(({
     classes,
     ...props
 }: StyledProps) => (
     <div
         className={classes.root}
         {...props}
-    >
-    <Grid xAxis={6} yAxis={6} />
-    </div>
+    />
 ));
 
-export default Root;
+export default SquareContainer;
