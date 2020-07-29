@@ -3,12 +3,15 @@ import mocha from "mocha";
 import { expect } from "chai";
 import Robot from "../src/robot";
 import PhysicalWorld from '../src/world';
+import { WORLD as TestWorld } from './fixtures';
 
 describe('Mars Robot', function() {
     let rover1 = null, rover2 = null, rover3 = null;
     let world;
     beforeEach(function() {
-      world = new PhysicalWorld();
+      world = new PhysicalWorld(5,5);
+      world.worldMap = TestWorld;
+
       rover1 = new Robot(world, [2, 2], 'N');
     });
 
@@ -202,7 +205,8 @@ describe('Mars Robot', function() {
 
     describe("Will handle multiple Robots in the world", () => {
         beforeEach(function() {
-          world = new PhysicalWorld();
+          world = new PhysicalWorld(5,5);
+          world.worldMap = TestWorld;
           rover1 = new Robot(world, [2, 2], 'N');
         });
         describe("should not error if does not encounter another rover", () => {
