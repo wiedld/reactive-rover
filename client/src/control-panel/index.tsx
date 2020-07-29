@@ -6,7 +6,8 @@ import { Dispatch } from '../hooks';
 interface ControlsProps {
     maxLoc: number;
     newWorld: (e: number) => void;
-    // moveToLoc: Dispatch;
+    newRobot: () => void;
+    moveToLoc: (l: Location) => void;
 }
 
 const styles = {
@@ -38,7 +39,8 @@ const Controls = injectSheet(styles)(({
     classes,
     maxLoc,
     newWorld,
-    // moveToLoc
+    newRobot,
+    moveToLoc
 }: StyledProps) => {
 
     const t = () => {};
@@ -56,19 +58,19 @@ const Controls = injectSheet(styles)(({
                 </label>
                 <input type="submit" value="Build World" className={classes.but} />
             </form>
-            <form onSubmit={t}>
+            <form onSubmit={e => { e.preventDefault(); !!moveToLoc && moveToLoc([x,y]); }} >
                 <label>
                     Move Rover To:
                     <input
                         type="number"
                         name="X axis"
-                        min="1" max={maxLoc}
+                        min={1} max={maxLoc}
                         placeholder="X axis"
                         onChange={e => setX(parseInt(e.target.value))} />
                     <input
                         type="number"
                         name="Y axis"
-                        min="1"
+                        min={1}
                         max={maxLoc}
                         placeholder="Y axis"
                         onChange={e => setY(parseInt(e.target.value))} />
@@ -76,7 +78,7 @@ const Controls = injectSheet(styles)(({
                 <input type="submit" value="Move Rover" className={classes.but} />
             </form>
             <form>
-                <button type="button" onClick={t} className={classes.but}>Add Rover</button>
+                <button type="button" onClick={newRobot} className={classes.but}>Add Rover</button>
                 <button type="reset" onClick={t} className={classes.but}>Reset</button>
             </form>
         </div>

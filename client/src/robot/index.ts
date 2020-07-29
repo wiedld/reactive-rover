@@ -348,4 +348,12 @@ export default class Robot {
         }, { dir: Robot.orderedDir.indexOf(startDir), cmds })]
         .map(x => ({ ...x, dir: Robot.orderedDir[x.dir] }))[0];
     }
+
+    renderInUI () {
+
+    }
+
+    removeFromUI () {
+        
+    }
 }

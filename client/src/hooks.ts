@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PhysicalWorld from './world';
 import Robot from './robot';
+import { createDefaultRobot } from './robot/utils';
 import { Location } from './global-types';
 
 export type Dispatch = React.Dispatch<React.SetStateAction<any>>;
@@ -14,22 +15,42 @@ export function useWorld(): [PhysicalWorld, (n: number) => void] {
     return [world, newWorld];
 }
 
-export function createRobot(world: PhysicalWorld): [Robot, Dispatch] {
-     // @ts-ignore
-    const createRobot = (loc = [2,2], dir = 'N') => new Robot(world, loc, dir);
-    const [robot, moveToLoc] = useState(createRobot());
+
+export function buildRobot (world: PhysicalWorld) {
+    const [robot, setRobot] = useState(createDefaultRobot(world));
+    const collection: Array<Robot> = [];
 
     useEffect(() => {
-        // @ts-ignore
-        function handleUserInput (e) {
-            console.log('e', e);
-            // FIXME: get from user selection? Any sized world?
-            // const loc: Location = [2,2];
-            // robot.moveTo(loc);
-        }
+        // update UI w/ robot
+        robot.renderInUI();
+
+        return () => {
+            let r;
+            while (collection.length) {
+                r = collection.shift();
+                r && r.removeFromUI();
+            }
+        };
     });
 
-    return [robot, moveToLoc];
-}
+    const newRobot = useCallback(
+        () => {
+            const r = createDefaultRobot(world);
+            collection.push(robot);
+            setRobot(r);
+            console.log('COLLECTION', collection);
+        },
+        [robot],
+      );
 
+    const moveToLoc = useCallback(
+        (loc: Location) => {
+            console.log('MOVE robot', robot);
+            robot.moveTo(loc);
+        },
+        [robot],
+      );
+
+    return [robot, newRobot, moveToLoc];
+}
 

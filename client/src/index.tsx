@@ -4,8 +4,9 @@ import injectSheet, { WithStylesProps } from 'react-jss';
 import classNames from 'classnames';
 import SquareContainer from './square-container';
 import Grid from './grid';
+import { createDefaultRobot } from './robot/utils';
 import ControlPanel from './control-panel';
-import { useWorld, createRobot } from './hooks';
+import { useWorld, buildRobot } from './hooks';
 
 const styles = {
     container: {
@@ -25,7 +26,7 @@ const App = injectSheet(styles)(({
     classes
 }) => {
     const [world, newWorld] = useWorld();
-    // const [robot, moveToLoc] = createRobot(world);
+    const [robot, newRobot, moveToLoc] = buildRobot(world);
 
     return (
         <div className={classes.container}>
@@ -38,7 +39,10 @@ const App = injectSheet(styles)(({
                 <ControlPanel
                     maxLoc={world.worldMap.length}
                     newWorld={newWorld}
-                    // moveToLoc={moveToLoc}
+                    // @ts-ignore
+                    newRobot={newRobot}
+                    // @ts-ignore
+                    moveToLoc={moveToLoc}
                 />
             </div>
         </div>
