@@ -4,10 +4,10 @@ import classNames from 'classnames';
 import Row from '../row';
 import Col from '../col';
 import Tile from '../tile';
+import { World } from '../global-types';
 
 interface GridProps {
-    xAxis: number,
-    yAxis: number
+    world: World
 }
 
 const styles = {
@@ -29,22 +29,25 @@ type StyledProps = WithStylesProps<typeof styles> & GridProps;
 
 const Grid = injectSheet(styles)(({
     classes,
-    xAxis,
-    yAxis,
+    world,
     ...props
-}: StyledProps) => (
-    <div
-        className={classes.grid}
-        {...props}
-    >
-        {[...Array(yAxis).keys()].map(y => {
-            return (
-                <Row key={y} order={y}>
-                    {[...Array(xAxis).keys()].map(x => <Col key={x} order={x}><Tile x={x} y={y} /></Col>)}
-                </Row>
-            );
-        })}
-    </div>
-));
+}: StyledProps) => {
+    const xAxis = world[0].length;
+    const yAxis = world.length;
+    return (
+        <div
+            className={classes.grid}
+            {...props}
+        >
+            {[...Array(yAxis).keys()].map(y => {
+                return (
+                    <Row key={y} order={y}>
+                        {[...Array(xAxis).keys()].map(x => <Col key={x} order={x}><Tile terrain={world[y][x]} /></Col>)}
+                    </Row>
+                );
+            })}
+        </div>
+    );
+});
 
 export default Grid;

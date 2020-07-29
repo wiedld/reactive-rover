@@ -98,7 +98,7 @@ export default class Robot {
             'B': 'F'
         };
         const loc = this.location;
-        if (PhysicalWorld.isOffWorld(loc) || this._physicalWorld.isObstacle(loc, loc)) {
+        if (this._physicalWorld.isOffWorld(loc) || this._physicalWorld.isObstacle(loc, loc)) {
             // Note: could input a special error code into commands (history)
             this._move(reverseCmd[cmd]);
             throw Robot.ObstacleException;
@@ -125,7 +125,7 @@ export default class Robot {
                 - note: physical exploration will backtrack over known terrian
                     --> recursive call to the pre-planning path.
     */
-    moveTo (location: Location, prePlan = false, knownWorld = PhysicalWorld.WORLD) {
+    moveTo (location: Location, prePlan = false, knownWorld = this._physicalWorld.worldMap) {
         try {
             if (prePlan) {
                 this.command(this._buildPlan(location, knownWorld))
@@ -147,7 +147,7 @@ export default class Robot {
     */
     _buildPlan (goalLoc: Location, knownWorld: World): Array<Command> {
         const nextTileIsOkay = (loc: Location) => Robot.isKnownWorld(loc, knownWorld)
-            && !PhysicalWorld.isOffWorld(loc)
+            && !this._physicalWorld.isOffWorld(loc)
             && !this._physicalWorld.isObstacle(loc, this.location);
 
         const planningOnly = true;
@@ -163,7 +163,7 @@ export default class Robot {
     */
     _physicalExploration (goalLoc: Location) {
         // only know size of world.
-        const nextTileIsOkay = (loc: Location) => !PhysicalWorld.isOffWorld(loc);
+        const nextTileIsOkay = (loc: Location) => !this._physicalWorld.isOffWorld(loc);
 
         return this._aStar(goalLoc, nextTileIsOkay, false);
     }
@@ -189,8 +189,8 @@ export default class Robot {
     */
     _aStar (goal: Location, nextTileIsOkay: (x: Location) => boolean, planningOnly: boolean) {
         // Array<Array<typeof visitedNode>>
-        const visited: Array<Array<typeof visitedNode>> = [...Array(PhysicalWorld.WORLD.length)]
-            .map(_ => Array(PhysicalWorld.WORLD[0].length));
+        const visited: Array<Array<typeof visitedNode>> = [...Array(this._physicalWorld.worldMap.length)]
+            .map(_ => Array(this._physicalWorld.worldMap[0].length));
 
         // cost gets stringified (on key creation)
         const toVisit: {[cost: string]: Array<Location> } = {}; // will be keyed by [estimatedCostToGoal]

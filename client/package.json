@@ -14,9 +14,10 @@
   "license": "ISC",
   "dependencies": {
     "classnames": "^2.2.6",
+    "file-loader": "^6.0.0",
     "react": "^16.12.0",
     "react-jss": "^10.3.0",
-    "redux": "^4.0.5"
+    "react-redux": "^7.2.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.5",

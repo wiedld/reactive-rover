@@ -12,7 +12,6 @@ const styles = {
 };
 type StyledProps = WithStylesProps<typeof styles>;
 
-
 const SquareContainer = injectSheet(styles)(({
     classes,
     ...props
