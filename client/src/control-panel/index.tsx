@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import injectSheet, { WithStylesProps } from 'react-jss';
 import classNames from 'classnames';
 import { Dispatch } from '../hooks';
+import { Location } from '../global-types';
 
 interface ControlsProps {
     maxLoc: number;

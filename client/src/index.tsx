@@ -4,6 +4,7 @@ import injectSheet, { WithStylesProps } from 'react-jss';
 import classNames from 'classnames';
 import SquareContainer from './square-container';
 import Grid from './grid';
+import Robot from './robot';
 import { createDefaultRobot } from './robot/utils';
 import ControlPanel from './control-panel';
 import { useWorld, buildRobot } from './hooks';

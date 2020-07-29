@@ -21,14 +21,13 @@ export function buildRobot (world: PhysicalWorld) {
     const collection: Array<Robot> = [];
 
     useEffect(() => {
-        // update UI w/ robot
-        robot.renderInUI();
+        // robot.renderInUI(robot.location);
 
         return () => {
             let r;
             while (collection.length) {
                 r = collection.shift();
-                r && r.removeFromUI();
+                // r && r.removeFromUI();
             }
         };
     });
