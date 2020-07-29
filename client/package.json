@@ -13,6 +13,7 @@
   "author": "Denise Wiedl <dlw405@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "babel-plugin-inline-react-svg": "^1.1.1",
     "classnames": "^2.2.6",
     "file-loader": "^6.0.0",
     "react": "^16.12.0",

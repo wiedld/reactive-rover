@@ -10,7 +10,8 @@ const babelPresets = [
 const babelPlugins = [
   ['@babel/plugin-proposal-class-properties', { allowNamespaces: true }],
   '@babel/plugin-proposal-object-rest-spread',
-  '@babel/plugin-syntax-dynamic-import'
+  '@babel/plugin-syntax-dynamic-import',
+  'inline-react-svg'
 ];
 
 module.exports = {
