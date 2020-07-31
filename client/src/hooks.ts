@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PhysicalWorld from './world';
-import Robot, { RobotType } from './robot';
+import { RobotType } from './robot';
 import { createDefaultRobot } from './robot/utils';
 import { Location } from './global-types';
 
@@ -16,13 +16,14 @@ export function useWorld(): [PhysicalWorld, (n: number) => void] {
 }
 
 
-export function buildRobot (world: PhysicalWorld) {
-    const [robot, setRobot] = useState(createDefaultRobot(world));
+type BuildRobotFnReturn = [RobotType, () => void, (loc: Location) => void];
+
+export function buildRobot (world: PhysicalWorld): BuildRobotFnReturn {
+    const [robot, setRobot]: [RobotType, Dispatch] = useState(createDefaultRobot(world));
     const collection: Array<RobotType> = [];
 
     useEffect(() => {
-        // @ts-ignore
-        robot.renderInUI(robot.location);
+        robot.renderInUI(robot);
     });
 
     const newRobot = useCallback(
@@ -41,6 +42,9 @@ export function buildRobot (world: PhysicalWorld) {
         (loc: Location) => {
             console.log('MOVE robot', robot);
             robot.moveTo(loc);
+            setTimeout(() => {
+                robot.renderInUI(robot);
+            }, 0);
         },
         [robot],
       );

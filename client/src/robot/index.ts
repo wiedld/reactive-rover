@@ -1,6 +1,8 @@
 import RobotLogic from './logic';
-import Mixin from './mixin';
+import MixinUiFun, { MixinUIinterface } from './mixin-ui-func';
 
-export type RobotType = typeof RobotLogic.prototype & typeof Mixin;
+const FullyFunctionalRobot = MixinUiFun(RobotLogic);
 
-export default RobotLogic;
+export type RobotType = typeof FullyFunctionalRobot & RobotLogic & MixinUIinterface;
+
+export default FullyFunctionalRobot;

@@ -1,6 +1,7 @@
+import { v4 as uuidv4 } from 'uuid';
 import { Command, Direction, Location, World } from '../global-types';
 import PhysicalWorld from '../world';
-import RobotRenderFun from './mixin';
+import RobotRenderFun from './mixin-ui-func';
 
 const STATUS_CODES = ['OK', 'OBSTACLE', 'INVALID_COMMAND'];
 
