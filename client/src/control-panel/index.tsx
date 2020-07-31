@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import injectSheet, { WithStylesProps } from 'react-jss';
 import classNames from 'classnames';
-import { Dispatch } from '../hooks';
 import { Location } from '../global-types';
 
 interface ControlsProps {
@@ -57,7 +56,7 @@ const Controls = injectSheet(styles)(({
             <form onSubmit={e => { e.preventDefault(); newWorld(size); }}>
                 <label>
                     Size of Grid:
-                    <input type="number" name="world size" onChange={e => setSize(parseInt(e.target.value))} />
+                    <input type="number" name="world size" min={1} onChange={e => setSize(parseInt(e.target.value))} />
                 </label>
                 <input type="submit" value="Build World" className={classes.button} />
             </form>

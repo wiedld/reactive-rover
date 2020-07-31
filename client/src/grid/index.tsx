@@ -28,6 +28,8 @@ type StyledProps = WithStylesProps<typeof styles> & GridProps;
 
 
 const Grid = injectSheet(styles)(({
+    // @ts-ignore
+    children,
     classes,
     world,
     ...props
@@ -39,6 +41,7 @@ const Grid = injectSheet(styles)(({
             className={classes.grid}
             {...props}
         >
+            {children}
             {[...Array(yAxis).keys()].map(y => {
                 return (
                     <Row key={y} order={y}>

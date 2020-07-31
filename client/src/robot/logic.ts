@@ -8,6 +8,8 @@ const STATUS_CODES = ['OK', 'OBSTACLE', 'INVALID_COMMAND'];
 class Robot {
     static ObstacleException = 1;
     static InvalidCmdException = 2;
+    static InvalidWorldUpdate = "Robot is located off the new world map";
+
     // ordered for mod math (rotating robot)
     static orderedDir: Array<Direction> = [
         'N',
@@ -40,6 +42,16 @@ class Robot {
     addCommand (c: Command) { this._commands.push(c); }
     addCommands (cs: Array<Command>) { this._commands.push(...cs); }
     get commands () { return this._commands; }
+
+    setWorld (w: PhysicalWorld) {
+        const [x,y]: Location = this._location;
+        console.log(w.worldMap[y], w.worldMap[y][x]);
+        if (!!w.worldMap[y] && !!w.worldMap[y][x]) {
+            this._physicalWorld = w;
+            return true;
+        }
+        throw Robot.InvalidWorldUpdate;
+    }
 
     constructor (physicalWorld: PhysicalWorld, location: Location, direction: Direction) {
         this._commands = [];

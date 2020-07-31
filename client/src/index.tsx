@@ -32,7 +32,9 @@ const App = injectSheet(styles)(({
         <div className={classes.container}>
             <div className={classes.grid}>
                 <SquareContainer>
-                    <Grid world={world.worldMap} />
+                    <Grid world={world.worldMap}>
+                        <RobotUI id={robot.id} />
+                    </Grid>
                 </SquareContainer>
             </div>
             <div className={classes.controls}>
@@ -40,12 +42,11 @@ const App = injectSheet(styles)(({
                     maxLoc={world.worldMap.length}
                     newWorld={newWorld}
                     // @ts-ignore
-                    newRobot={newRobot}
+                    newRobot={() => newRobot(robot)}
                     // @ts-ignore
                     moveToLoc={moveToLoc}
                 />
             </div>
-            <RobotUI />
         </div>
     );
 });
