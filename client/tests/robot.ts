@@ -1,7 +1,7 @@
 // @ts-nocheck
 import mocha from "mocha";
 import { expect } from "chai";
-import Robot from "../src/robot";
+import Robot from "../src/robot/funcs";
 import PhysicalWorld from '../src/world';
 import { WORLD as TestWorld } from './fixtures';
 

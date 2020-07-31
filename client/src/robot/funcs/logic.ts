@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
-import { Command, Direction, Location, World } from '../global-types';
-import PhysicalWorld from '../world';
+import { Command, Direction, Location, World } from '../../global-types';
+import PhysicalWorld from '../../world';
 import RobotRenderFun from './mixin-ui-func';
 
 const STATUS_CODES = ['OK', 'OBSTACLE', 'INVALID_COMMAND'];
@@ -45,7 +45,6 @@ class Robot {
 
     setWorld (w: PhysicalWorld) {
         const [x,y]: Location = this._location;
-        console.log(w.worldMap[y], w.worldMap[y][x]);
         if (!!w.worldMap[y] && !!w.worldMap[y][x]) {
             this._physicalWorld = w;
             return true;

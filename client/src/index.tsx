@@ -4,9 +4,9 @@ import injectSheet from 'react-jss';
 import classNames from 'classnames';
 import SquareContainer from './square-container';
 import Grid from './grid';
-import RobotUI from './robot/ui';
-import ControlPanel from './control-panel';
-import { useWorld, buildRobot } from './hooks';
+import { ControlsForWorld as ControlPanel } from './control-panel';
+import { PORTAL_ID } from './control-panel/for-robot';
+import { useWorld } from './hooks';
 
 const styles = {
     container: {
@@ -26,26 +26,18 @@ const App = injectSheet(styles)(({
     classes
 }) => {
     const [world, newWorld] = useWorld();
-    const [robot, newRobot, moveToLoc] = buildRobot(world);
+    console.log("RENDER APP")
 
     return (
         <div className={classes.container}>
             <div className={classes.grid}>
                 <SquareContainer>
-                    <Grid world={world.worldMap}>
-                        <RobotUI id={robot.id} />
-                    </Grid>
+                    <Grid world={world} />
                 </SquareContainer>
             </div>
             <div className={classes.controls}>
-                <ControlPanel
-                    maxLoc={world.worldMap.length}
-                    newWorld={newWorld}
-                    // @ts-ignore
-                    newRobot={() => newRobot(robot)}
-                    // @ts-ignore
-                    moveToLoc={moveToLoc}
-                />
+                <ControlPanel newWorld={newWorld} />
+                <div id={PORTAL_ID} />
             </div>
         </div>
     );

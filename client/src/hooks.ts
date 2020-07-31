@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PhysicalWorld from './world';
-import { RobotType } from './robot';
+import { RobotType } from './robot/funcs';
 import { createDefaultRobot } from './robot/utils';
 import { Location } from './global-types';
 import PubSub, { EventType } from './pub-sub';
@@ -21,30 +21,46 @@ export function useWorld(): [PhysicalWorld, (n: number) => void] {
 }
 
 
-type BuildRobotFnReturn = [RobotType, () => void, (loc: Location) => void];
+type BuildRobotFnReturn = [RobotType, () => void, (loc: Location) => void, () => void];
 
+/* This function is called whenever a new world is created.
+*/
 export function buildRobot (world: PhysicalWorld): BuildRobotFnReturn {
-    const [robot, setRobot]: [RobotType, Dispatch] = useState(createDefaultRobot(world));
+    const robotFactory = (world: PhysicalWorld) => {
+        console.log('robotFactory')
+        const r = createDefaultRobot(world);
+        addToPubSub(r);
+        return r;
+    };
+
+    const newRobotWithPubSub = (oldR: RobotType) => {
+        PubSub.unsubscribe(EventType.NewWorld, robot.id);
+        const r = robotFactory(world);
+        setRobot(r);
+    };
 
     // @ts-ignore
-    const addToPubSub = () => PubSub.subscribe(EventType.NewWorld, (w: PhysicalWorld) => {
+    const addToPubSub = (r) => PubSub.subscribe(EventType.NewWorld, r.id, (w: PhysicalWorld) => {
         try {
-            robot.setWorld(w);
+            console.log(r.location, '<', w.worldMap.length);
+            r.setWorld(w);
+            console.log("...ok")
         } catch (_) {
-            newRobot();
+            console.log('CATCH')
+            PubSub.unsubscribe(EventType.NewWorld, r.id);
+            // FIXME: post message to console.
         }
     });
 
+    const [robot, setRobot]: [RobotType, Dispatch] = useState(robotFactory(world));
+
     useEffect(() => {
-        PubSub.empty(EventType.NewWorld);
-        addToPubSub();
         robot.renderInUI(robot);
     });
 
     const newRobot = useCallback(
         () => {
-            const r = createDefaultRobot(world);
-            setRobot(r);
+            newRobotWithPubSub(robot);
         },
         [robot],
       );
@@ -57,6 +73,12 @@ export function buildRobot (world: PhysicalWorld): BuildRobotFnReturn {
         [robot],
       );
 
-    return [robot, newRobot, moveToLoc];
+    const resetAll = useCallback(
+        () => {
+            PubSub.empty(EventType.NewWorld);
+        }, []
+    );
+
+    return [robot, newRobot, moveToLoc, resetAll];
 }
 

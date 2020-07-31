@@ -4,10 +4,11 @@ import classNames from 'classnames';
 import Row from '../row';
 import Col from '../col';
 import Tile from '../tile';
-import { World } from '../global-types';
+import Robot from '../robot';
+import PhysicalWorld from '../world';
 
 interface GridProps {
-    world: World;
+    world: PhysicalWorld;
 }
 
 const styles = {
@@ -28,26 +29,25 @@ type StyledProps = WithStylesProps<typeof styles> & GridProps;
 
 
 const Grid = injectSheet(styles)(({
-    // @ts-ignore
-    children,
     classes,
     world,
     ...props
 }: StyledProps) => {
-    const xAxis = world[0].length;
-    const yAxis = world.length;
+    const xAxis = world.worldMap[0].length;
+    const yAxis = world.worldMap.length;
+
     return (
         <div
             className={classes.grid}
             {...props}
         >
-            {children}
+            <Robot world={world} />
             {[...Array(yAxis).keys()].map(y => {
                 return (
                     <Row key={y} order={y}>
                         {[...Array(xAxis).keys()].map(x => (
                             <Col key={x} order={x}>
-                                <Tile location={[x,y]} terrain={world[y][x]} />
+                                <Tile location={[x,y]} terrain={world.worldMap[y][x]} />
                             </Col>)
                         )}
                     </Row>
