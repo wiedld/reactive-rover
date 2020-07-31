@@ -19,7 +19,6 @@ const styles = {
         opacity: '0%'
     },
     img: {
-        margins: 'auto',
         maxWidth: '100%',
         maxHeight: '100%',
         objectFit: 'contain'

@@ -19,6 +19,7 @@ class Robot {
         return !!knownWorld[y] && !!knownWorld[y][x];
     }
 
+    id: string;
     _location: Location;
     _direction: number;
     _commands: Array<Command>;
@@ -33,6 +34,7 @@ class Robot {
 
     setDirection (dir: number) { this._direction = dir; }
     get direction () { return Robot.orderedDir[this._direction]; }
+    get numericDirection () { return this._direction; }
 
     addCommand (c: Command) { this._commands.push(c); }
     addCommands (cs: Array<Command>) { this._commands.push(...cs); }
@@ -44,6 +46,7 @@ class Robot {
         this._physicalWorld.setLocation(location);
         this._location = location;
         this._direction = Robot.orderedDir.indexOf(direction);
+        this.id = uuidv4();
     }
 
     command (commands: Array<Command>) {

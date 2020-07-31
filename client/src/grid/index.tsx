@@ -7,7 +7,7 @@ import Tile from '../tile';
 import { World } from '../global-types';
 
 interface GridProps {
-    world: World
+    world: World;
 }
 
 const styles = {

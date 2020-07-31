@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import injectSheet, { WithStylesProps } from 'react-jss';
+import injectSheet from 'react-jss';
 import classNames from 'classnames';
 import SquareContainer from './square-container';
 import Grid from './grid';

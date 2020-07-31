@@ -29,7 +29,7 @@ const styles = {
             }
         }
     },
-    but: {
+    button: {
         backgroundColor: '#B9D9EB'
     }
 };
@@ -59,7 +59,7 @@ const Controls = injectSheet(styles)(({
                     Size of Grid:
                     <input type="number" name="world size" onChange={e => setSize(parseInt(e.target.value))} />
                 </label>
-                <input type="submit" value="Build World" className={classes.but} />
+                <input type="submit" value="Build World" className={classes.button} />
             </form>
             <form onSubmit={e => { e.preventDefault(); !!moveToLoc && moveToLoc(transformLocToZeroIndexing([x,y])); }} >
                 <label>
@@ -78,11 +78,11 @@ const Controls = injectSheet(styles)(({
                         placeholder="Y axis"
                         onChange={e => setY(parseInt(e.target.value))} />
                 </label>
-                <input type="submit" value="Move Rover" className={classes.but} />
+                <input type="submit" value="Move Rover" className={classes.button} />
             </form>
             <form>
-                <button type="button" onClick={newRobot} className={classes.but}>Add Rover</button>
-                <button type="reset" onClick={t} className={classes.but}>Reset</button>
+                <button type="button" onClick={newRobot} className={classes.button}>Add Rover</button>
+                <button type="reset" onClick={t} className={classes.button}>Reset</button>
             </form>
         </div>
     );
