@@ -1,7 +1,7 @@
 // @ts-nocheck
 import mocha from "mocha";
 import { expect } from "chai";
-import Robot from "../src/robot/funcs";
+import Robot from "../src/robot/logic";
 import PhysicalWorld from '../src/world';
 import { WORLD as TestWorld } from './fixtures';
 
@@ -12,7 +12,7 @@ describe('Mars Robot', function() {
       world = new PhysicalWorld(5,5);
       world.worldMap = TestWorld;
 
-      rover1 = new Robot(world, [2, 2], 'N');
+      rover1 = new Robot({ physicalWorld: world, location: [2, 2], direction: 'N'});
     });
 
     describe('When the Mars Robot is initialized', function() {
@@ -207,13 +207,13 @@ describe('Mars Robot', function() {
         beforeEach(function() {
           world = new PhysicalWorld(5,5);
           world.worldMap = TestWorld;
-          rover1 = new Robot(world, [2, 2], 'N');
+          rover1 = new Robot({ physicalWorld: world, location: [2, 2], direction: 'N'});
         });
         describe("should not error if does not encounter another rover", () => {
           it("workz", () => {
             rover1.moveTo([4,4]);
 
-            rover2 = new Robot(world, [2, 2], 'N');
+            rover2 = new Robot({ physicalWorld: world, location: [2, 2], direction: 'N'});
             const status = rover2.command(['F', 'F', 'B']);
             expect(status.status).to.equal('OK');
           });
@@ -224,7 +224,7 @@ describe('Mars Robot', function() {
                 const status1 = rover1.command(cmds);
                 expect(status1.status).to.equal('OK');
 
-                rover2 = new Robot(world, [2, 2], 'N');
+                rover2 = new Robot({ physicalWorld: world, location: [2, 2], direction: 'N'});
                 const status2 = rover2.command(cmds.concat(['L', 'L']));
                 expect(status2.status).to.equal('OBSTACLE');
             });
@@ -236,7 +236,7 @@ describe('Mars Robot', function() {
                 expect(status1.status).to.equal('OK');
 
 
-                rover3 = new Robot(world, [2, 2], 'N');
+                rover3 = new Robot({ physicalWorld: world, location: [2, 2], direction: 'N'});
                 const status2 = rover3.moveTo(loc);
                 expect(status2.status).to.equal('INVALID_COMMAND');
             });
