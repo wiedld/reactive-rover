@@ -19,45 +19,28 @@ type BuildRobotFnReturn = [
 export function buildRobot (world: PhysicalWorld): BuildRobotFnReturn {
     const robotFactory = (world: PhysicalWorld) => {
         const r = createDefaultRobot(world);
+        setRobot(r);
+        PubSub.publish(EventType.NewRobot, r);
         addToPubSub(r);
         return r;
     };
 
-    const newRobotWithSetState = (oldR: RobotType) => {
-        const r = robotFactory(world);
-        setRobot(r);
-    };
-
     const addToPubSub = (r: RobotType) => {
-        PubSub.publish(EventType.NewRobot, r);
-        const { id } = r;
-
-        /* Managing state btwn hooks, you either:
-            1 - have global reducer (useReducer)
-            2 - have a PubSub model.
-
-            But if have PubSub, in which the subscriber is changing state
-                --> you cannot have a circular dependency.
-            
-            Since the logic has multiple robots inhabiting the same world
-                --> this is robots sharing the world state.
-
-            Therefore, the world comes first.
-            And all robots subsribe to world events.
-        */
         // @ts-ignore
-        PubSub.subscribe(EventType.NewWorld, r.id, (w: PhysicalWorld) => {
+        PubSub.subscribe(EventType.NewWorld, r.id, (() => (w: PhysicalWorld) => {
+            // FIXME TODO. what to do here?
             // resetAll();
-        });
+            PubSub.publish(EventType.RemoveRobot, r);
+        })());
     };
 
     const [robot, setRobot]: [RobotType, Dispatch] = useState(robotFactory(world));
 
     const newRobot = useCallback(
         () => {
-            newRobotWithSetState(robot);
+            robotFactory(world);
         },
-        [robot],
+        [world],
       );
 
     const moveToLoc = useCallback(
