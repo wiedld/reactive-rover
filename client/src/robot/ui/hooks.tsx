@@ -10,14 +10,13 @@ interface UIoffset {
   left: number;
 }
 
-type buildRobotUiFnReturn = [number, number]
+type buildRobotUiFnReturn = [UIoffset];
 
 /* This function is called whenever a new robot is created.
     RobotUI is downstream of the Robot.
 */
 export function buildRobotUi (robot: RobotType, init: UIoffset): buildRobotUiFnReturn {
-  const [offsetTop, setTop] = useState(init.top);
-  const [offsetLeft, setLeft] = useState(init.left);
+  const [offset, setOffset] = useState(init);
 
   // @ts-ignore
   PubSub.subscribe(EventType.RobotMove, robot.id, (r: RobotType) => renderInUI(r));
@@ -39,8 +38,7 @@ export function buildRobotUi (robot: RobotType, init: UIoffset): buildRobotUiFnR
     });
 
     const { offsetLeft: left, offsetTop: top } = newTile;
-    setTop(top);
-    setLeft(left);
+    setOffset({top, left});
   }
 
   const removeFromUI = (r: RobotType) => {
@@ -48,5 +46,5 @@ export function buildRobotUi (robot: RobotType, init: UIoffset): buildRobotUiFnR
     console.log('removeFromUI')
   }
 
-  return [offsetTop, offsetLeft];
+  return [offset];
 }

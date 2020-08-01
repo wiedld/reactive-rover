@@ -32,10 +32,10 @@ const RobotUI = injectSheet(styles)(({
     worldSize: x,
     ...props
 }: StyledProps) => {
-    const [offsetTop, offsetLeft] = buildRobotUi(robot, { top: 30, left: 44 });
+    const [{top, left}] = buildRobotUi(robot, { top: 30, left: 44 });
 
     const maxHeight = `${Math.floor(Math.min(100/(x/4), 100))}px`;
-    const style = { top: `${offsetTop}px`, left: `${offsetLeft}px` };
+    const style = { top: `${top}px`, left: `${left}px` };
 
     return (<div className={classes.wrapper} style={style}>
             <img {...props} className={classes.img} src={RobotIcon} id={robot.id} style={{maxHeight}} />
