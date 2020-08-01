@@ -2,7 +2,7 @@ import React from 'react';
 import injectSheet, { WithStylesProps } from 'react-jss';
 import classNames from 'classnames';
 import RobotUI from './ui';
-import { buildRobot } from '../hooks';
+import { buildRobot } from './logic/hooks';
 import PhysicalWorld from '../world';
 import ControlPanel from '../control-panel/for-robot';
 
@@ -26,7 +26,7 @@ const Robot = injectSheet(styles)(({
 
     return (
         <React.Fragment>
-            <RobotUI id={robot.id} />
+            <RobotUI robot={robot} worldSize={world.worldMap.length} />
             <ControlPanel
                 maxLoc={world.worldMap.length}
                 // @ts-ignore

@@ -6,7 +6,7 @@ import SquareContainer from './square-container';
 import Grid from './grid';
 import { ControlsForWorld as ControlPanel } from './control-panel';
 import { PORTAL_ID } from './control-panel/for-robot';
-import { useWorld } from './hooks';
+import { useWorld } from './world/hooks';
 
 const styles = {
     container: {
@@ -26,7 +26,6 @@ const App = injectSheet(styles)(({
     classes
 }) => {
     const [world, newWorld] = useWorld();
-    console.log("RENDER APP")
 
     return (
         <div className={classes.container}>

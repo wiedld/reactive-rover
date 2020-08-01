@@ -1,7 +1,7 @@
 import PhysicalWorld from "./world";
-import { RobotType } from "./robot/funcs";
+import { RobotType } from "./robot/logic";
 
-export enum EventType { NewWorld = 'new-world' };
+export enum EventType { NewWorld = 'new-world', RobotMove = 'robot-move' };
 
 type info = PhysicalWorld | RobotType;
 type SubFn = (arg: info) => void;
@@ -26,7 +26,6 @@ export default (function(){
         },
 
         unsubscribe: function(topic: EventType, id: string) {
-            console.log('UNSUB: ', id);
             topics[topic] && delete topics[topic][id];
         },
 

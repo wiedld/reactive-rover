@@ -25,8 +25,8 @@ const styles = {
         padding: '8%'
     }
 };
-type StyledProps = WithStylesProps<typeof styles> & GridProps;
 
+type StyledProps = WithStylesProps<typeof styles> & GridProps;
 
 const Grid = injectSheet(styles)(({
     classes,
