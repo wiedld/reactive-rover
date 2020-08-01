@@ -1,7 +1,11 @@
 import PhysicalWorld from "./world";
 import { RobotType } from "./robot/logic";
 
-export enum EventType { NewWorld = 'new-world', RobotMove = 'robot-move' };
+export enum EventType {
+    NewWorld = 'new-world',
+    NewRobot = "new-robot",
+    RobotMove = 'robot-move'
+};
 
 type info = PhysicalWorld | RobotType | null;
 type SubFn = (arg: info) => void;

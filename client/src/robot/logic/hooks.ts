@@ -28,8 +28,10 @@ export function buildRobot (world: PhysicalWorld): BuildRobotFnReturn {
         setRobot(r);
     };
 
-    // @ts-ignore
-    const addToPubSub = (r) => PubSub.subscribe(EventType.NewWorld, r.id, (w: PhysicalWorld) => {
+    const addToPubSub = (r: RobotType) => {
+        PubSub.publish(EventType.NewRobot, r);
+        const { id } = r;
+
         /* Managing state btwn hooks, you either:
             1 - have global reducer (useReducer)
             2 - have a PubSub model.
@@ -42,10 +44,13 @@ export function buildRobot (world: PhysicalWorld): BuildRobotFnReturn {
 
             Therefore, the world comes first.
             And all robots subsribe to world events.
-         */
-        PubSub.unsubscribe(EventType.NewWorld, r.id);
-        // FIXME: post message to console.
-    });
+        */
+        // @ts-ignore
+        PubSub.subscribe(EventType.NewWorld, r.id, (w: PhysicalWorld) => {
+            PubSub.empty(EventType.NewWorld);
+            PubSub.empty(EventType.NewRobot);
+        });
+    };
 
     const [robot, setRobot]: [RobotType, Dispatch] = useState(robotFactory(world));
 

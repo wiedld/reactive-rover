@@ -206,7 +206,7 @@ class Robot {
             - `nextTileOkay` function, restricts what parts of the world can be planned.
         Returns:
             - an array of directions [N, W, W, S, S], or bool true.
-        
+
         Caveat:
             - not a proper A* in terms of big O,
                 because the lookup into the toVisit is not a single priority queue (keyed by cost).
