@@ -37,7 +37,7 @@ const RobotUI = injectSheet(styles)(({
     const maxHeight = `${Math.floor(Math.min(100/(x/4), 100))}px`;
     const style = { top: `${top}px`, left: `${left}px` };
 
-    return (<div className={classes.wrapper} style={style}>
+    return (<div id={robot.id} className={classes.wrapper} style={style}>
             <img {...props} className={classes.img} src={RobotIcon} id={robot.id} style={{maxHeight}} />
         </div>
     );

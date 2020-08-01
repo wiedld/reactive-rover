@@ -16,13 +16,17 @@ type buildRobotUiFnReturn = [UIoffset];
     RobotUI is downstream of the Robot.
 */
 export function buildRobotUi (robot: RobotType, init: UIoffset): buildRobotUiFnReturn {
-  const [offset, setOffset] = useState(init);
+  const [offset, setOffset] = useState(init);0
 
+  // @ts-ignore
+  PubSub.subscribe(EventType.NewRobot, robot.id, (r: RobotType) => renderInUI(r));
+  // @ts-ignore
+  PubSub.subscribe(EventType.RemoveRobot, robot.id, (r: RobotType) => removeFromUI(r));
   // @ts-ignore
   PubSub.subscribe(EventType.RobotMove, robot.id, (r: RobotType) => renderInUI(r));
   // @ts-ignore
   PubSub.subscribe(EventType.NewWorld, robot.id, (() => {
-    return () => renderInUI(robot);
+    return () => removeFromUI(robot);
   })());
 
 
@@ -42,8 +46,9 @@ export function buildRobotUi (robot: RobotType, init: UIoffset): buildRobotUiFnR
   }
 
   const removeFromUI = (r: RobotType) => {
-    // FIXME TODO
-    console.log('removeFromUI')
+    // not needed.
+    // because it's already removed from the RobotQueue
+    // --> therefore, removed from UI.
   }
 
   return [offset];

@@ -4,7 +4,9 @@ import { RobotType } from "./robot/logic";
 export enum EventType {
     NewWorld = 'new-world',
     NewRobot = "new-robot",
-    RobotMove = 'robot-move'
+    RemoveRobot = "remove-robot",
+    RobotMove = 'robot-move',
+    EmptyRobotQueue = "empty-robot-queue"
 };
 
 type info = PhysicalWorld | RobotType | null;
@@ -22,7 +24,7 @@ export default (function(){
     
             topics[topic][id] = listener;
 
-            console.log('SUB', id);
+            console.log('SUB > event=', topic,',  id=', id);
             console.log('...length of subs', Object.keys(topics[topic]));
 
     
@@ -33,11 +35,17 @@ export default (function(){
             topics[topic] && delete topics[topic][id];
         },
 
+        getSubscribers: function(topic: EventType) {
+            return Object.keys(topics[topic]);
+        },
+
         empty: function(topic: EventType) {
             delete topics[topic];
         },
 
         publish: function(topic: EventType, info: info) {
+            console.log('PUB > event=', topic, ",  info=", info);
+
             if(!hOP.call(topics, topic)) return;
     
             Object.keys(topics[topic]).forEach(id => {

@@ -47,8 +47,7 @@ export function buildRobot (world: PhysicalWorld): BuildRobotFnReturn {
         */
         // @ts-ignore
         PubSub.subscribe(EventType.NewWorld, r.id, (w: PhysicalWorld) => {
-            PubSub.empty(EventType.NewWorld);
-            PubSub.empty(EventType.NewRobot);
+            // resetAll();
         });
     };
 
@@ -77,7 +76,7 @@ export function buildRobot (world: PhysicalWorld): BuildRobotFnReturn {
 
     const resetAll = useCallback(
         () => {
-            PubSub.empty(EventType.NewWorld);
+            PubSub.publish(EventType.EmptyRobotQueue, null);
         }, []
     );
 

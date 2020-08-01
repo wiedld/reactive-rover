@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import Row from '../row';
 import Col from '../col';
 import Tile from '../tile';
-import Robot from '../robot';
+import Robots from '../robots';
 import PhysicalWorld from '../world';
 
 interface GridProps {
@@ -41,7 +41,7 @@ const Grid = injectSheet(styles)(({
             className={classes.grid}
             {...props}
         >
-            <Robot world={world} />
+            <Robots world={world} />
             {[...Array(yAxis).keys()].map(y => {
                 return (
                     <Row key={y} order={y}>

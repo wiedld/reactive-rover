@@ -16,13 +16,18 @@ const styles = {
 
 export type StyledProps = WithStylesProps<typeof styles> & RobotProps;
 
-
+/*
+    Control Panel is within the Robot instance.
+    As such, the last robot created, is the one under control.
+*/
 const Robot = injectSheet(styles)(({
     classes,
     world,
     ...props
 }: StyledProps) => {
     const [robot, newRobot, moveToLoc, resetAll] = buildRobot(world);
+
+    console.log('robot', robot)
 
     return (
         <React.Fragment>
