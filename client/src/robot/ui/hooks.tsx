@@ -31,6 +31,13 @@ export function buildRobotUi (robot: RobotType, init: UIoffset): buildRobotUiFnR
     const newTile = r && document.getElementById(buildTileId(r.location));
     if (!newTile) return;
 
+    newTile.animate([{
+      backgroundColor: 'grey',
+      backgroundImage: 'none'
+    }], {
+      duration: 2000,
+    });
+
     const { offsetLeft: left, offsetTop: top } = newTile;
     setTop(top);
     setLeft(left);
