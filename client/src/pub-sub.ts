@@ -3,7 +3,7 @@ import { RobotType } from "./robot/logic";
 
 export enum EventType { NewWorld = 'new-world', RobotMove = 'robot-move' };
 
-type info = PhysicalWorld | RobotType;
+type info = PhysicalWorld | RobotType | null;
 type SubFn = (arg: info) => void;
 export type RemoveFn = () => void;
 

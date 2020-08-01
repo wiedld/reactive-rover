@@ -58,9 +58,7 @@ export function buildRobot (world: PhysicalWorld): BuildRobotFnReturn {
 
     const moveToLoc = useCallback(
         (loc: Location) => {
-            const cb = (r: RobotType) => {
-                PubSub.publish(EventType.RobotMove, r);
-            };
+            const cb = (r: RobotType) => PubSub.publish(EventType.RobotMove, r);
             try {
                 robot.moveTo(loc, false, cb);
             } catch (e) {

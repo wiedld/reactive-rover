@@ -20,9 +20,12 @@ export function buildRobotUi (robot: RobotType, init: UIoffset): buildRobotUiFnR
   const [offsetLeft, setLeft] = useState(init.left);
 
   // @ts-ignore
-  PubSub.subscribe(EventType.RobotMove, robot.id, (r: RobotType) => {
-    renderInUI(r);
-  });
+  PubSub.subscribe(EventType.RobotMove, robot.id, (r: RobotType) => renderInUI(r));
+  // @ts-ignore
+  PubSub.subscribe(EventType.NewWorld, robot.id, (() => {
+    return () => renderInUI(robot);
+  })());
+
 
   const renderInUI = (r: RobotType) => {
     const newTile = r && document.getElementById(buildTileId(r.location));
@@ -32,7 +35,6 @@ export function buildRobotUi (robot: RobotType, init: UIoffset): buildRobotUiFnR
     const { offsetLeft: left, offsetTop: top } = newTile;
     setTop(top);
     setLeft(left);
-    // setOffset({ left, top });
   }
 
   const removeFromUI = (r: RobotType) => {
