@@ -2,7 +2,7 @@
 
 The wandering Mars Rover. Started as a coding challenge (to do OOP style). That original code lives in `src/robot/logic/logic.ts`.
 
-Then people kept asking about react hooks. Since I had already used other attempts to cleanly manage side effects (see Approach #1 below), understand the need, and therefore decided to play with hooks.
+Then people kept asking about react hooks. Since I had already used other attempts to cleanly manage side effects (see Approach #1 below), I understood the need and therefore decided to play with hooks.
 
 
 ## Managing a centralized source of truth
@@ -91,7 +91,7 @@ Dependency flow = `World -> Robots -> Robot -> UiRobot`:
 
 * deactivated robots become additional hazards.
 
-* when moving, if a robot encounters a hazard -- then it moves back to the last position without a hazard. If the hazard is not on the end goal (location coordinates), then the robot may keep trying to find a path.
+* when moving, if a robot encounters a hazard -- then it moves back to the last position without a hazard. If the hazard is not on the end goal (location coordinates), then the robot may keep trying to find a path. (This means that it will wander over more of the world.)
 
 * kept the classes Robot and World intact (original coding challenge), with only two minor changes.
 
