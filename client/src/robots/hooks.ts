@@ -56,7 +56,6 @@ export function buildRobotQueue (): buildRobotQueueFnReturn {
             const update: Queue = {};
             Object.keys(queue).forEach(rId => {
                 const robot: RobotType = queue[rId];
-                console.log('RESIZE robot', robot)
                 // @ts-ignore
                 update[rId] = {...robot, offset: findOffsetFromLocation(robot._location) };
             });

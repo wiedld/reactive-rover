@@ -2,41 +2,17 @@ import React, { useState } from 'react';
 import injectSheet, { WithStylesProps } from 'react-jss';
 import classNames from 'classnames';
 import { Location } from '../../global-types';
+import { styles } from "../styles";
 
-const styles = {
-    container: {
-        boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.29)',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'stretch',
-        padding: '10%',
-        minWidth: '115px',
-        '& form': {
-            padding: '20% 5%',
-            '& label': {
-                padding: '5% 5%',
-            },
-            '& button': {
-                display: 'inline-block',
-                width: '100%'
-            }
-        }
-    },
-    inner: {
-        width: '100%'
-    },
-    button: {
-        backgroundColor: '#B9D9EB'
-    }
-};
+export const PORTAL_ID = "robot-control-panel";
 
-export interface ControlsProps {
+export interface Props {
     disabled: boolean;
     maxLoc: number;
     moveToLoc: (l: Location) => void;
 }
 
-type StyledProps = WithStylesProps<typeof styles> & ControlsProps;
+export type StyledProps = WithStylesProps<typeof styles> & Props;
 
 export default injectSheet(styles)(({
     classes,

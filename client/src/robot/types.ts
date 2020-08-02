@@ -1,3 +1,2 @@
 export { RobotType } from "./logic";
-export { UiRobotType } from "./ui";
-export { UIoffsetType } from "./ui/hooks";
+export { UiRobotType, UIoffsetType } from "./ui/hooks";

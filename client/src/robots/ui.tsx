@@ -1,13 +1,11 @@
 import React from 'react';
 import injectSheet, { WithStylesProps } from 'react-jss';
 import classNames from 'classnames';
-import PubSub, { EventType } from "../pub-sub";
-import { RobotType } from "../robot/types";
 import { buildRobotQueue } from "./hooks";
 import PhysicalWorld from "../world";
 import RobotUI from "../robot/ui";
 import Robot from "../robot";
-import ControlRobotQueuePanel from "../control-panel/for-robots";
+import { ControlsForRobots as ControlRobotQueuePanel } from "../control-panel";
 
 interface RobotQueue {
     world: PhysicalWorld;

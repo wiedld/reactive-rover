@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import RobotUI from './ui';
 import { buildRobot } from './logic/hooks';
 import PhysicalWorld from '../world';
-import ControlPanel from '../control-panel/for-robot';
+import { ControlsForRobot as ControlPanel } from '../control-panel';
 
 
 interface RobotProps {

@@ -5,8 +5,8 @@ import classNames from 'classnames';
 import SquareContainer from './square-container';
 import Grid from './grid';
 import { ControlsForWorld as ControlPanel } from './control-panel';
-import { PORTAL_ID as robotControls } from './control-panel/for-robot';
-import { PORTAL_ID as allRobotsControls } from './control-panel/for-robots';
+import { PORTAL_ID as robotControls } from './control-panel/panels/for-robot';
+import { PORTAL_ID as allRobotsControls } from './control-panel/panels/for-robots';
 import { useWorld } from './world/hooks';
 
 const styles = {
