@@ -8,7 +8,8 @@ export enum EventType {
     DeactivateRobot = 'deactivate-robot',
     RemoveRobot = "remove-robot",
     RobotMove = 'robot-move',
-    EmptyRobotQueue = "empty-robot-queue"
+    EmptyRobotQueue = "empty-robot-queue",
+    WindowResize = 'window-resize'
 };
 
 type info = PhysicalWorld | RobotType | UiRobotType | null;

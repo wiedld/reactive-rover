@@ -61,5 +61,5 @@ export function buildUiRobot (robot: RobotType, init: UIoffsetType): buildUiRobo
     r.removeFromWorld();
   }
 
-  return [offset];
+  return [offset, setOffset];
 }

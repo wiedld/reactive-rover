@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Dispatch } from './../global-types';
-import { UiRobotType } from '../robot/types';
+import { UiRobotType, RobotType } from '../robot/types';
+import { findOffsetFromLocation } from "../robot/utils";
 import PubSub, { EventType } from '../pub-sub';
 
 type Queue = { [id: string]: UiRobotType };
@@ -39,7 +40,6 @@ export function buildRobotQueue (): buildRobotQueueFnReturn {
             setQueue(queue);
         });
 
-        // @ts-ignore
         PubSub.subscribe(EventType.EmptyRobotQueue, queueID, () => {
             Object.keys(queue).forEach(rId => {
                 PubSub.publish(EventType.RemoveRobot, queue[rId]);
@@ -48,11 +48,25 @@ export function buildRobotQueue (): buildRobotQueueFnReturn {
             setActiveRobot(null);
         });
 
+        // @ts-ignore
+        PubSub.subscribe(EventType.WindowResize, queueID, () => {
+            const update: Queue = {};
+            Object.keys(queue).forEach(rId => {
+                const robot: RobotType = queue[rId];
+                console.log('RESIZE robot', robot)
+                // @ts-ignore
+                update[rId] = {...robot, ...findOffsetFromLocation(robot._location) };
+            });
+            setQueue(update);
+        });
+  
+
         return function cleanup () {
             PubSub.unsubscribe(EventType.NewRobotMade, queueID);
             PubSub.unsubscribe(EventType.DeactivateRobot, queueID);
             PubSub.unsubscribe(EventType.RemoveRobot, queueID);
             PubSub.unsubscribe(EventType.EmptyRobotQueue, queueID);
+            PubSub.unsubscribe(EventType.WindowResize, queueID);
         }
     });
 

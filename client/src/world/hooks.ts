@@ -11,6 +11,8 @@ export function useWorld(): [PhysicalWorld, (n: number) => void] {
 
     useEffect(() => {
         PubSub.publish(EventType.NewWorldMade, world);
+
+        window.addEventListener('resize', () => PubSub.publish(EventType.WindowResize, null));
     });
 
     return [world, newWorld];
