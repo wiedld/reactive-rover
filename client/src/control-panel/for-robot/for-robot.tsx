@@ -10,6 +10,7 @@ const styles = {
         flexDirection: 'column',
         alignItems: 'stretch',
         padding: '10%',
+        minWidth: '115px',
         '& form': {
             padding: '20% 5%',
             '& label': {
@@ -20,6 +21,9 @@ const styles = {
                 width: '100%'
             }
         }
+    },
+    inner: {
+        width: '100%'
     },
     button: {
         backgroundColor: '#B9D9EB'
@@ -50,15 +54,17 @@ export default injectSheet(styles)(({
     return (
         <div className={classes.container}>
             <form onSubmit={e => { e.preventDefault(); !!moveToLoc && moveToLoc(transformLocToZeroIndexing([x,y])); }} >
-                <label>
+                <label className={classes.inner}>
                     Move Rover To:
                     <input
+                        className={classes.inner}
                         type="number"
                         name="X axis"
                         min={1} max={maxLoc}
                         placeholder="X axis"
                         onChange={e => setX(parseInt(e.target.value))} />
                     <input
+                        className={classes.inner}
                         type="number"
                         name="Y axis"
                         min={1}

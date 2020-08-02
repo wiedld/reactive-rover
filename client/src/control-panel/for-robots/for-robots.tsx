@@ -10,6 +10,7 @@ const styles = {
         flexDirection: 'column',
         alignItems: 'stretch',
         padding: '10%',
+        minWidth: '115px',
         '& form': {
             padding: '20% 5%',
             '& label': {

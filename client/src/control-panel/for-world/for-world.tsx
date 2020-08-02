@@ -9,6 +9,7 @@ const styles = {
         flexDirection: 'column',
         alignItems: 'stretch',
         padding: '10%',
+        minWidth: '115px',
         '& form': {
             padding: '20% 5%',
             '& label': {
@@ -19,6 +20,9 @@ const styles = {
                 width: '100%'
             }
         }
+    },
+    inner: {
+        width: '100%'
     },
     button: {
         backgroundColor: '#B9D9EB'
@@ -40,9 +44,15 @@ export default injectSheet(styles)(({
     return (
         <div className={classes.container}>
             <form onSubmit={e => { e.preventDefault(); newWorld(size); }}>
-                <label>
+                <label className={classes.inner}>
                     Size of Grid:
-                    <input type="number" name="world size" min={1} max={25} onChange={e => setSize(parseInt(e.target.value))} />
+                    <input
+                        className={classes.inner}
+                        type="number"
+                        name="world size"
+                        min={1} max={25}
+                        onChange={e => setSize(parseInt(e.target.value))}
+                    />
                 </label>
                 <input type="submit" value="Build World" className={classes.button} />
             </form>
