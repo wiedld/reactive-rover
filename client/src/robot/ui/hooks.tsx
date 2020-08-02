@@ -19,13 +19,13 @@ export function buildRobotUi (robot: RobotType, init: UIoffset): buildRobotUiFnR
   const [offset, setOffset] = useState(init);0
 
   // @ts-ignore
-  PubSub.subscribe(EventType.NewRobot, robot.id, (r: RobotType) => renderInUI(r));
+  PubSub.subscribe(EventType.NewRobotMade, robot.id, (r: RobotType) => renderInUI(r));
   // @ts-ignore
   PubSub.subscribe(EventType.RemoveRobot, robot.id, (r: RobotType) => removeFromUI(r));
   // @ts-ignore
   PubSub.subscribe(EventType.RobotMove, robot.id, (r: RobotType) => renderInUI(r));
   // @ts-ignore
-  PubSub.subscribe(EventType.NewWorld, robot.id, (() => {
+  PubSub.subscribe(EventType.NewWorldMade, robot.id, (() => {
     return () => removeFromUI(robot);
   })());
 
@@ -46,6 +46,7 @@ export function buildRobotUi (robot: RobotType, init: UIoffset): buildRobotUiFnR
   }
 
   const removeFromUI = (r: RobotType) => {
+    console.log('removeFromUI', r);
     // not needed.
     // because it's already removed from the RobotQueue
     // --> therefore, removed from UI.

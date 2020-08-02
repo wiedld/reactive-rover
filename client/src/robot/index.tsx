@@ -25,20 +25,18 @@ const Robot = injectSheet(styles)(({
     world,
     ...props
 }: StyledProps) => {
-    const [robot, newRobot, moveToLoc, resetAll] = buildRobot(world);
+    const [robot, moveToLoc] = buildRobot(world);
 
     console.log('robot', robot)
 
     return (
         <React.Fragment>
-            <RobotUI robot={robot} worldSize={world.worldMap.length} />
+            {robot && <RobotUI robot={robot} worldSize={world.worldMap.length} />}
             <ControlPanel
+                disabled={robot == null}
                 maxLoc={world.worldMap.length}
                 // @ts-ignore
-                newRobot={() => newRobot(robot)}
-                // @ts-ignore
                 moveToLoc={moveToLoc}
-                resetAll={resetAll}
             />
         </React.Fragment>
     );

@@ -10,7 +10,7 @@ export function useWorld(): [PhysicalWorld, (n: number) => void] {
     const newWorld = (n: number) => setWorld(createWorld(n,n));
 
     useEffect(() => {
-        PubSub.publish(EventType.NewWorld, world);
+        PubSub.publish(EventType.NewWorldMade, world);
     });
 
     return [world, newWorld];

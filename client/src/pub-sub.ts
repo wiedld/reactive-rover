@@ -2,8 +2,9 @@ import PhysicalWorld from "./world";
 import { RobotType } from "./robot/logic";
 
 export enum EventType {
-    NewWorld = 'new-world',
-    NewRobot = "new-robot",
+    NewWorldMade = 'new-world',
+    NewRobotMade = "new-robot",
+    CreateRobot = "create-robot",
     RemoveRobot = "remove-robot",
     RobotMove = 'robot-move',
     EmptyRobotQueue = "empty-robot-queue"

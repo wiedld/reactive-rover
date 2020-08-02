@@ -7,6 +7,7 @@ import { buildRobotQueue } from "./hooks";
 import PhysicalWorld from "../world";
 import RobotUI from "../robot/ui";
 import Robot from "../robot";
+import ControlRobotQueuePanel from "../control-panel/for-robots";
 
 interface RobotQueue {
     world: PhysicalWorld;
@@ -22,22 +23,29 @@ const RobotQueue = injectSheet(styles)(({
     world,
     ...props
 }: StyledProps) => {
-    const [allRobots, activeRobot] = buildRobotQueue();
+    const [allRobots, activeRobot, resetAll, createRobot] = buildRobotQueue();
 
     console.log("ALL ROBOTS:", allRobots);
     return (
         <React.Fragment>
-            {Object.keys(allRobots).map(robotId => {
-                {/* Non-Active robots. */}
-                if (robotId !== activeRobot)
-                    return (
-                        <RobotUI 
-                            robot={allRobots[robotId]}
-                            worldSize={world.worldMap.length}
-                        />);
-                {/* Active robot. */}
-                return (<Robot world={world} />);
-            })}
+            {/* Non-Active robots. */}
+                {Object.keys(allRobots).map(robotId => {
+                    if (robotId !== activeRobot)
+                        return (
+                            <RobotUI 
+                                robot={allRobots[robotId]}
+                                worldSize={world.worldMap.length}
+                            />);
+                    return null;
+                })}
+            {/* Active robot. */}
+                <Robot world={world} />
+            <ControlRobotQueuePanel
+                // @ts-ignore
+                newRobot={createRobot}
+                // @ts-ignore
+                resetAll={resetAll}
+            />
         </React.Fragment>
     );
 });

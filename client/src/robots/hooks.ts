@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Dispatch } from './../global-types';
 import { RobotType } from '../robot/logic';
@@ -6,7 +6,13 @@ import PubSub, { EventType } from '../pub-sub';
 
 type Queue = { [id: string]: RobotType };
 type ActiveRobot = null | string;   // robot.id
-type buildRobotQueueFnReturn = [Queue, ActiveRobot];
+
+type buildRobotQueueFnReturn = [
+    Queue,
+    ActiveRobot,
+    () => void,                 // resetAll
+    () => void,                 // createRobot()
+];
 
 export function buildRobotQueue (): buildRobotQueueFnReturn {
     const queueID = uuidv4();
@@ -15,7 +21,7 @@ export function buildRobotQueue (): buildRobotQueueFnReturn {
     const [activeRobot, setActiveRobot]: [ActiveRobot, Dispatch] = useState(null);
 
     // @ts-ignore
-    PubSub.subscribe(EventType.NewRobot, queueID, (r: RobotType) => {
+    PubSub.subscribe(EventType.NewRobotMade, queueID, (r: RobotType) => {
         queue[r.id] = r;
         console.log(`add ${r.id}, queue=`, queue);
         setQueue(queue);
@@ -36,10 +42,17 @@ export function buildRobotQueue (): buildRobotQueueFnReturn {
         });
     });
 
-    // // @ts-ignore
-    // PubSub.subscribe(EventType.NewWorld, queueID, () => {
-    //     PubSub.publish(EventType.EmptyRobotQueue, null);
-    // });
+    const resetAll = useCallback(
+        () => {
+            PubSub.publish(EventType.EmptyRobotQueue, null);
+        }, []
+    );
 
-    return [queue, activeRobot];
+    const createRobot = useCallback(
+        () => {
+            PubSub.publish(EventType.CreateRobot, null);
+        }, []
+    );
+
+    return [queue, activeRobot, resetAll, createRobot];
 }

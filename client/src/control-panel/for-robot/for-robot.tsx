@@ -27,20 +27,19 @@ const styles = {
 };
 
 export interface ControlsProps {
+    disabled: boolean;
     maxLoc: number;
-    newRobot: () => void;
     moveToLoc: (l: Location) => void;
-    resetAll: () => void;
 }
 
 type StyledProps = WithStylesProps<typeof styles> & ControlsProps;
 
 export default injectSheet(styles)(({
     classes,
+    disabled,
     maxLoc,
-    newRobot,
     moveToLoc,
-    resetAll
+    ...props
 }: StyledProps) => {
 
     const [x, setX] = useState(1);
@@ -67,11 +66,7 @@ export default injectSheet(styles)(({
                         placeholder="Y axis"
                         onChange={e => setY(parseInt(e.target.value))} />
                 </label>
-                <input type="submit" value="Move Rover" className={classes.button} />
-            </form>
-            <form>
-                <button type="button" onClick={newRobot} className={classes.button}>Add Rover</button>
-                <button type="reset" onClick={resetAll} className={classes.button}>Rovers sleepytime</button>
+                <input type="submit" value="Move Rover" className={classes.button} disabled={disabled}/>
             </form>
         </div>
     );
