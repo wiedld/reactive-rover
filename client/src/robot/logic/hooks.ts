@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import PhysicalWorld from '../../world';
-import { RobotType } from '.';
-import { createDefaultRobot } from '../utils';
+import { RobotType } from '../types';
+import { createDefaultRobot, findOffsetFromLocation } from '../utils';
 import { Location, Dispatch } from '../../global-types';
 import PubSub, { EventType } from '../../pub-sub';
 
@@ -11,7 +11,7 @@ type ActiveRobot = RobotType | null;
 
 type BuildRobotFnReturn = [
     ActiveRobot,                  // robot
-    (loc: Location) => void    // moveToLoc()
+    (loc: Location) => void       // moveToLoc()
 ];
 
 /* This function is called whenever a new world is created.
@@ -21,27 +21,38 @@ export function buildRobot (world: PhysicalWorld): BuildRobotFnReturn {
     const robotFactoryId = uuidv4();
 
     const robotFactory = (world: PhysicalWorld) => {
-        console.log("ROBOT FACTORY")
         const r = createDefaultRobot(world);
-        setRobot(r);
-        PubSub.publish(EventType.NewRobotMade, r);
-        addToPubSub(r);
         return r;
     };
 
-    const addToPubSub = (r: RobotType) => {
-        // @ts-ignore
-        PubSub.subscribe(EventType.NewWorldMade, r.id, (() => (w: PhysicalWorld) => {
-            // memory cleanup
-            PubSub.publish(EventType.RemoveRobot, r);
-        })());
-    };
-
-    PubSub.subscribe(EventType.CreateRobot, robotFactoryId, () => {
-        robotFactory(world);
-    });
-
     const [robot, setRobot]: [ActiveRobot, Dispatch] = useState(null);
+
+    useEffect(() => {
+        PubSub.subscribe(EventType.CreateRobot, robotFactoryId, () => {
+            // save curr location of existing robot (updates state of RobotQueue -> re-render)
+            if (robot != null) {
+                // @ts-ignore
+                const offset = findOffsetFromLocation(robot.location);
+                PubSub.publish(EventType.DeactivateRobot, Object.assign(robot, offset));
+                // @ts-ignore
+                PubSub.unsubscribe(EventType.RobotMove, robot.id);
+            }
+
+            // make new robot.
+            const r = robotFactory(world);
+            PubSub.publish(EventType.NewRobotMade, r);
+            setRobot(r);
+        });
+
+        PubSub.subscribe(EventType.RemoveRobot, robotFactoryId, () => {
+            setRobot(null);
+        });
+
+        return function cleanup () {
+            PubSub.unsubscribe(EventType.CreateRobot, robotFactoryId);
+            PubSub.unsubscribe(EventType.RemoveRobot, robotFactoryId);
+        }
+    });
 
     const moveToLoc = useCallback(
         (loc: Location) => {

@@ -1,13 +1,14 @@
 import React from 'react';
 import injectSheet, { WithStylesProps } from 'react-jss';
 import classNames from 'classnames';
-import { RobotType } from "../logic";
-import { buildRobotUi } from "./hooks";
+import { buildUiRobot, getDefaultOffset } from "./hooks";
+import { UiRobotType, RobotType } from "../types";
 // @ts-ignore
 import RobotIcon from '../../../public/wall-e.png';
 
 interface RobotUIProps {
-    robot: RobotType
+    deactivated?: boolean;
+    robot: RobotType | UiRobotType;
     worldSize: number;
 }
 
@@ -28,11 +29,26 @@ export type StyledProps = WithStylesProps<typeof styles> & RobotUIProps;
 
 const RobotUI = injectSheet(styles)(({
     classes,
+    deactivated = false,
     robot,
     worldSize: x,
     ...props
 }: StyledProps) => {
-    const [{top, left}] = buildRobotUi(robot, { top: 30, left: 44 });
+    /* react hooks are shared state. but each robot is it's own.
+        - so either we conditionally use the hook (feels like an antipattern)
+        - or break DRY by making two different components. ActivatedRobotUI vs DeactivatedRobotUI.
+    */
+    let top, left;
+    if (!deactivated) {
+        const [{ offset }] = buildUiRobot(robot, getDefaultOffset());
+        top = offset.top;
+        left = offset.left;
+    } else {
+        // @ts-ignore
+        top = robot.offset.top;
+        // @ts-ignore
+        left = robot.offset.left;
+    }
 
     const maxHeight = `${Math.floor(Math.min(100/(x/4), 100))}px`;
     const style = { top: `${top}px`, left: `${left}px` };

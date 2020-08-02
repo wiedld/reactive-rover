@@ -2,32 +2,43 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { buildTileId } from '../../tile/utils';
 import { Location, Direction, Dispatch } from '../../global-types';
-import { RobotType } from '../logic';
+import { RobotType } from '../types';
 import PubSub, { EventType } from '../../pub-sub';
+import { DEFAULT_LOCATION, findOffsetFromLocation } from "../utils";
 
-interface UIoffset {
-  top: number;
-  left: number;
+export const getDefaultOffset = (): UIoffsetType => {
+  return findOffsetFromLocation(DEFAULT_LOCATION);
+};
+
+export type UiRobotType = RobotType & UIoffsetType;
+
+export interface UIoffsetType {
+  offset: {
+    top: number;
+    left: number;
+  }
 }
 
-type buildRobotUiFnReturn = [UIoffset];
+type buildUiRobotFnReturn = [UIoffsetType];
 
 /* This function is called whenever a new robot is created.
     RobotUI is downstream of the Robot.
 */
-export function buildRobotUi (robot: RobotType, init: UIoffset): buildRobotUiFnReturn {
-  const [offset, setOffset] = useState(init);0
+export function buildUiRobot (robot: RobotType, init: UIoffsetType): buildUiRobotFnReturn {
+  const [offset, setOffset] = useState(init);
 
-  // @ts-ignore
-  PubSub.subscribe(EventType.NewRobotMade, robot.id, (r: RobotType) => renderInUI(r));
-  // @ts-ignore
-  PubSub.subscribe(EventType.RemoveRobot, robot.id, (r: RobotType) => removeFromUI(r));
-  // @ts-ignore
-  PubSub.subscribe(EventType.RobotMove, robot.id, (r: RobotType) => renderInUI(r));
-  // @ts-ignore
-  PubSub.subscribe(EventType.NewWorldMade, robot.id, (() => {
-    return () => removeFromUI(robot);
-  })());
+  useEffect(() => {
+    // @ts-ignore
+    PubSub.subscribe(EventType.RobotMove, robot.id, (r: RobotType) => renderInUI(r));
+
+    // @ts-ignore
+    PubSub.subscribe(EventType.RemoveRobot, robot.id, (r: RobotType) => removeFromUI(r));
+
+    return function cleanup () {
+      PubSub.unsubscribe(EventType.RobotMove, robot.id);
+      PubSub.unsubscribe(EventType.RemoveRobot, robot.id);
+    }
+  });
 
 
   const renderInUI = (r: RobotType) => {
@@ -42,14 +53,12 @@ export function buildRobotUi (robot: RobotType, init: UIoffset): buildRobotUiFnR
     });
 
     const { offsetLeft: left, offsetTop: top } = newTile;
-    setOffset({top, left});
+    setOffset({ offset: { top, left }});
   }
 
   const removeFromUI = (r: RobotType) => {
-    console.log('removeFromUI', r);
-    // not needed.
-    // because it's already removed from the RobotQueue
-    // --> therefore, removed from UI.
+    // remove from obstacle map
+    r.removeFromWorld();
   }
 
   return [offset];

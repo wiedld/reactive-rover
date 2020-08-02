@@ -48,6 +48,10 @@ class Robot {
     }
     get location () { return this._location; }
 
+    removeFromWorld () {
+        this._physicalWorld.removeLocation(this._location);
+    }
+
     setDirection (dir: number) { this._direction = dir; }
     get direction () { return Robot.orderedDir[this._direction]; }
     get numericDirection () { return this._direction; }
@@ -209,7 +213,7 @@ class Robot {
 
         Caveat:
             - not a proper A* in terms of big O,
-                because the lookup into the toVisit is not a single priority queue (keyed by cost).
+                because the lookup into the toVisit is not a single lookup in a priority queue (keyed by cost).
             - since we are re-using the same aStar algorithm in BOTH physical exploration & pre-planning,
                 we need to consider the different costs in backtracking.
             - to make a real AStar:
@@ -334,7 +338,6 @@ class Robot {
                 this.moveTo(loc, true, cb, visited);
                 loc = this.location;
                 cb(this);
-                console.log("MOVED", loc)
             }
 
             x = loc[0];

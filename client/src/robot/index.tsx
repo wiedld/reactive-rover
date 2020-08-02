@@ -27,11 +27,9 @@ const Robot = injectSheet(styles)(({
 }: StyledProps) => {
     const [robot, moveToLoc] = buildRobot(world);
 
-    console.log('robot', robot)
-
     return (
         <React.Fragment>
-            {robot && <RobotUI robot={robot} worldSize={world.worldMap.length} />}
+            {robot && <RobotUI robot={robot} worldSize={world.worldMap.length} key={robot.id} />}
             <ControlPanel
                 disabled={robot == null}
                 maxLoc={world.worldMap.length}

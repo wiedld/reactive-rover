@@ -1,22 +1,23 @@
 import PhysicalWorld from "./world";
-import { RobotType } from "./robot/logic";
+import { RobotType, UiRobotType } from "./robot/types";
 
 export enum EventType {
     NewWorldMade = 'new-world',
-    NewRobotMade = "new-robot",
     CreateRobot = "create-robot",
+    NewRobotMade = "new-robot",
+    DeactivateRobot = 'deactivate-robot',
     RemoveRobot = "remove-robot",
     RobotMove = 'robot-move',
     EmptyRobotQueue = "empty-robot-queue"
 };
 
-type info = PhysicalWorld | RobotType | null;
+type info = PhysicalWorld | RobotType | UiRobotType | null;
 type SubFn = (arg: info) => void;
 export type RemoveFn = () => void;
 
 export default (function(){
-    var topics: { [k: string]: { [id: string]: SubFn } } = {};
-    var hOP = topics.hasOwnProperty;
+    const topics: { [k: string]: { [id: string]: SubFn } } = {};
+    const hOP = topics.hasOwnProperty;
   
     return {
         subscribe: function(topic: EventType, id: string, listener: SubFn): RemoveFn {
@@ -24,10 +25,6 @@ export default (function(){
                 topics[topic] = {};
     
             topics[topic][id] = listener;
-
-            console.log('SUB > event=', topic,',  id=', id);
-            console.log('...length of subs', Object.keys(topics[topic]));
-
     
             return () => delete topics[topic][id];
         },
@@ -37,7 +34,7 @@ export default (function(){
         },
 
         getSubscribers: function(topic: EventType) {
-            return Object.keys(topics[topic]);
+            return !hOP.call(topics, topic) ? [] : Object.keys(topics[topic]);
         },
 
         empty: function(topic: EventType) {
@@ -45,8 +42,6 @@ export default (function(){
         },
 
         publish: function(topic: EventType, info: info) {
-            console.log('PUB > event=', topic, ",  info=", info);
-
             if(!hOP.call(topics, topic)) return;
     
             Object.keys(topics[topic]).forEach(id => {
