@@ -18,7 +18,7 @@ export const DEFAULT_LOCATION: Location = [0,0];
 export const findOffsetFromLocation = (loc: Location): UIoffsetType => {
     const newTile = document.getElementById(buildTileId(loc));
     if (!newTile)
-        return { offset: { top: 30, left: 44 } };
+        return { top: 30, left: 44 };
     else
-        return { offset: { top: newTile.offsetTop, left: newTile.offsetLeft } };
+        return { top: newTile.offsetTop, left: newTile.offsetLeft };
 };

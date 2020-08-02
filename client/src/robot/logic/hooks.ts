@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import PhysicalWorld from '../../world';
 import { RobotType } from '../types';
-import { createDefaultRobot, findOffsetFromLocation } from '../utils';
+import { createDefaultRobot } from '../utils';
 import { Location, Dispatch } from '../../global-types';
 import PubSub, { EventType } from '../../pub-sub';
 
@@ -31,9 +31,7 @@ export function buildRobot (world: PhysicalWorld): BuildRobotFnReturn {
         PubSub.subscribe(EventType.CreateRobot, robotFactoryId, () => {
             // save curr location of existing robot (updates state of RobotQueue -> re-render)
             if (robot != null) {
-                // @ts-ignore
-                const offset = findOffsetFromLocation(robot.location);
-                PubSub.publish(EventType.DeactivateRobot, Object.assign(robot, offset));
+                PubSub.publish(EventType.DeactivateRobot, robot);
                 // @ts-ignore
                 PubSub.unsubscribe(EventType.RobotMove, robot.id);
             }

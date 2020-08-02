@@ -1,9 +1,9 @@
 import React from 'react';
 import injectSheet, { WithStylesProps } from 'react-jss';
 import classNames from 'classnames';
-import { buildUiRobot, getDefaultOffset } from "./hooks";
+import { buildUiRobot, getDefaultOffset, UIoffsetType } from "./hooks";
 import { UiRobotType, RobotType } from "../types";
-import { buildTileId } from "../../tile/utils";
+import { findOffsetFromLocation } from "../utils";
 // @ts-ignore
 import RobotIcon from '../../../public/wall-e.png';
 
@@ -39,23 +39,16 @@ const RobotUI = injectSheet(styles)(({
         - so either we conditionally use the hook (feels like an antipattern)
         - or break DRY by making two different components. ActivatedRobotUI vs DeactivatedRobotUI.
     */
+   let offsetF: UIoffsetType;
+   if (deactivated) {
+       // @ts-ignore
+        offsetF = robot.offset;
+   } else {
+        const [offset, setOffset] = buildUiRobot(robot, findOffsetFromLocation(robot._location));
+        offsetF = offset;
+   }
 
-   const [{ offset }, setOffset] = buildUiRobot(robot, getDefaultOffset());
-
-    if (!deactivated) {
-        // @ts-ignore
-        if (buildTileId(robot.location) != buildTileId([0,0]) || robot.offset != undefined)
-            // @ts-ignore
-            setOffset({offset: robot.offset});
-        // @ts-ignore
-    } else {
-        // @ts-ignore
-        setOffset({ offset: robot.offset });
-    }
-
-    const { left, top } = offset;
-
-    console.log("HERE IN ROBOT UI > final", robot, top, left)
+    const { left, top } = offsetF;
 
     const maxHeight = `${Math.floor(Math.min(100/(x/4), 100) * window.innerWidth/800) }px`;
     const style = { top: `${top}px`, left: `${left}px` };

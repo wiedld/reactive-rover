@@ -10,16 +10,16 @@ export const getDefaultOffset = (): UIoffsetType => {
   return findOffsetFromLocation(DEFAULT_LOCATION);
 };
 
-export type UiRobotType = RobotType & UIoffsetType;
-
-export interface UIoffsetType {
-  offset: {
-    top: number;
-    left: number;
-  }
+export interface UiRobotType extends RobotType {
+  offset: UIoffsetType;
 }
 
-type buildUiRobotFnReturn = [UIoffsetType];
+export interface UIoffsetType {
+    top: number;
+    left: number;
+}
+
+type buildUiRobotFnReturn = [UIoffsetType, Dispatch];
 
 /* This function is called whenever a new robot is created.
     RobotUI is downstream of the Robot.
@@ -34,9 +34,17 @@ export function buildUiRobot (robot: RobotType, init: UIoffsetType): buildUiRobo
     // @ts-ignore
     PubSub.subscribe(EventType.RemoveRobot, robot.id, (r: RobotType) => removeFromUI(r));
 
+    // @ts-ignore
+    PubSub.subscribe(EventType.WindowResize, robot.id, () => {
+      // @ts-ignore
+      if (robot.offset == undefined)
+        setOffset(findOffsetFromLocation(robot.location));
+    }); 
+
     return function cleanup () {
       PubSub.unsubscribe(EventType.RobotMove, robot.id);
       PubSub.unsubscribe(EventType.RemoveRobot, robot.id);
+      PubSub.unsubscribe(EventType.WindowResize, robot.id);
     }
   });
 
@@ -53,12 +61,12 @@ export function buildUiRobot (robot: RobotType, init: UIoffsetType): buildUiRobo
     });
 
     const { offsetLeft: left, offsetTop: top } = newTile;
-    setOffset({ offset: { top, left }});
+    setOffset({ top, left });
   }
 
   const removeFromUI = (r: RobotType) => {
     // remove from obstacle map
-    r.removeFromWorld();
+    r?.removeFromWorld && r.removeFromWorld();
   }
 
   return [offset, setOffset];

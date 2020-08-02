@@ -6,11 +6,11 @@ import { findOffsetFromLocation } from "../robot/utils";
 import PubSub, { EventType } from '../pub-sub';
 
 type Queue = { [id: string]: UiRobotType };
-type ActiveRobotId = null | string;   // robot.id
+type ActiveRobotId = string;   // robot.id
 
 type buildRobotQueueFnReturn = [
     Queue,
-    ActiveRobotId,
+    ActiveRobotId | null,
     () => void,                 // resetAll
     () => void,                 // createRobot()
 ];
@@ -19,9 +19,11 @@ export function buildRobotQueue (): buildRobotQueueFnReturn {
     const queueID = uuidv4();
     const q: Queue = {};
     const [queue, setQueue] = useState(q);
-    const [activeRobot, setActiveRobot]: [ActiveRobotId, Dispatch] = useState(null);
+    const [activeRobot, setActiveRobot]: [ActiveRobotId | null, Dispatch] = useState(null);
 
     useEffect(() => {
+        PubSub.subscribe(EventType.NewWorldMade, queueID, () => PubSub.publish(EventType.EmptyRobotQueue, null));
+
         // @ts-ignore
         PubSub.subscribe(EventType.NewRobotMade, queueID, (r: UiRobotType) => {
             queue[r.id] = r;
@@ -30,8 +32,9 @@ export function buildRobotQueue (): buildRobotQueueFnReturn {
         });
 
         // @ts-ignore
-        PubSub.subscribe(EventType.DeactivateRobot, queueID, (r: UiRobotType) => {
-            queue[r.id] = r;
+        PubSub.subscribe(EventType.DeactivateRobot, queueID, (r: RobotType) => {
+            const readyToRetire = Object.assign(r, { offset: findOffsetFromLocation(r._location) });
+            queue[r.id] = readyToRetire;
         });
 
         // @ts-ignore
@@ -55,13 +58,14 @@ export function buildRobotQueue (): buildRobotQueueFnReturn {
                 const robot: RobotType = queue[rId];
                 console.log('RESIZE robot', robot)
                 // @ts-ignore
-                update[rId] = {...robot, ...findOffsetFromLocation(robot._location) };
+                update[rId] = {...robot, offset: findOffsetFromLocation(robot._location) };
             });
             setQueue(update);
         });
   
 
         return function cleanup () {
+            PubSub.unsubscribe(EventType.NewWorldMade, queueID);
             PubSub.unsubscribe(EventType.NewRobotMade, queueID);
             PubSub.unsubscribe(EventType.DeactivateRobot, queueID);
             PubSub.unsubscribe(EventType.RemoveRobot, queueID);

@@ -25,9 +25,6 @@ const RobotQueue = injectSheet(styles)(({
 }: StyledProps) => {
     const [allRobots, activeRobot, resetAll, createRobot] = buildRobotQueue();
 
-    console.log("ALL ROBOTS:", allRobots);
-    console.log("PubSub > move", PubSub.getSubscribers(EventType.RobotMove));
-
     return (
         <React.Fragment>
             {/* Non-Active robots. */}
