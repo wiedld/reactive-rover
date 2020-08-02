@@ -7,83 +7,85 @@ Then people kept asking about react hooks. Since I had already used other attemp
 ### To run:
 
 Frontend only interactivity:
-1. be in client dir
+1. Be in client dir.
 2. `npm i`
 3. `npm run build:dev`
 4. `npm run start:dev`
-5. has hot reloading
+5. Has hot reloading.
 
 
 ## Managing a centralized source of truth
 
-This repo is an experiment in managing state without a centralized source. (See next section.) Here is a a quick recap of my current biases/experiences/IMHO-could-be-wrong when it comes to managing a centralized state tree (e.g. redux).
+This repo is an experiment in managing state without a centralized source (e.g. without redux), and using only react hooks. Here is a a quick recap of my current biases/experiences/IMHO-could-be-wrong when it comes to managing a centralized state tree (e.g. redux).
 
-* redux action creators are a great or terrible thing. Depends on use.
+* Redux action creators are a great or terrible thing. Depends on use.
 
-* thunks are about microtasks (async/await), which can block up the event loop.
+* Thunks are about microtasks (async/await), which can block up the event loop.
 
-* if you play it loose with the thunking and action creators, you may create some unexpected serialization of state updates.
+* If you play it loose with the thunking and action creators, you may create some unexpected serialization of state updates. And/or slow down your app.
 
-* redux-sagas force you to use mostly macrotasks, but then you need to carefully manage the atomicity. e.g. make atomic transactions/actions in your state management, which have the ability to be reversible if things go wrong (e.g. an API call fails). And make sure you build watchers for when things go wrong (& other error handling). Important note: Your ability to make the state changes be reversible, is a key factor for not needing serialization of your sagas (thereby allowing you to use macrotask-producing generators). Background on sagas: https://redux-saga.js.org/docs/introduction/SagaBackground.html
+* Generators and function calls hit the macrotask queue (JS event loop). Therefore, non-blocking.
 
-* All of the above is about state management over a centralized source of truth in your frontend. How about the state management across the DOM? And other ways to think about it (without the state centralization)?
+* Redux-sagas is a state management lib that forces you to use mostly macrotasks, but require that you conceptualize state management based on atomicity. You start with a series of interconnected tasks which manage state. Break up these tasks into units, based upon what state updates can be rolled back (i.e. application of an inverse change). Then each task may be called concurrently. Set watchers (and error handlers), such that when one of the tasks fail, the interconnected tasks are rolled back. In this way state management is clean without serialization required in how state changes hit the centralized store, or in how you write your code. Background on sagas: https://redux-saga.js.org/docs/introduction/SagaBackground.html (Note: redux-sagas also use the abstracted concepts fork, join, spawn, etc.)
+
+* All of the above is about state management over a centralized source of truth in your frontend. How about the state management across the DOM, with react hooks, without the state centralization? (See approach #2 below. Experimentation is my friend.)
 
 
-## Managing state in the DOM
+## Managing state and its side effects on the DOM
 
-First time using react hooks. It seems that there are a few key concepts to keep in mind when planning for state management.
+A few ways to manage state (not exhuastive).
 
 ### Approach #1: Redux as a central source of truth
 
-Pre-hook world traditionally used a centralized redux tree, and all unidirection flow from this tree (into the unidirection react rendering) could be done as follows:
+Pre-hook world traditionally used a centralized tree (e.g. redux). All unidirection flow from this tree (into the unidirection react rendering) could be done as follows:
 
-1. selectors in mapStateToProps, which directly accesses the redux centralized state.
+1. Selectors in mapStateToProps, which directly accesses the redux centralized state.
 
-2. using react class PureComponents or functional components, using all state as derived from props.
+2. Using react PureComponent class or functional components, using all state as derived from props.
 
-3. re-rendering was therefore limited to any changes in props only (and state derived from props). Therefore, the internal state *should* never get out of sync with the centralized redux source.
+3. Re-rendering was therefore limited to any changes in props only (and state derived from props). Therefore, the internal state *should* never get out of sync with the centralized redux source.
 
 This ^^ was my previous go-to method. (Plus being careful of 3rd party UI libs with internal state.)
 
 
-### Approach #2: Managing all state through react hooks (no centralization).
+### Approach #2: Managing all state through react hooks (no centralization)
 
 Key concepts to keep in mind:
 
-1. re-using the same hook will share state.
+1. Re-using the same hook will share state.
 
-2. when a component is re-mounted due to a parent re-rendering, then the hook will be re-created. Then it's a question of how you set initState for the hook.
+2. When a component is re-mounted due to a parent re-rendering, then the hook will be re-created. Then it's a question of how you set initState for the hook.
 
-3. be very intentionally aware of hook shared state, and when a hooks inits, if you are putting hooks inside a component that is mounted based on a list (e.g. `values.map(v => <MyComponent key={v.key} {...v} />)`).
+3. Be very intentionally aware of hook shared state, and when a hooks inits, if you are putting hooks inside a descendent component that is mounted based on a list (e.g. `values.map(v => <MyComponent key={v.key} {...v} />)`).
 
-4. entirely separated hook states may impact each other using PubSub (see react docs).
+4. Entirely separated hook states may impact each other using PubSub (see react docs).
 
-5. but the hook state, and the corresponding PubSubs, only exist after the component is initialized.
+5. But the hook state, and the corresponding PubSubs, only exist after the component is mounted.
 
-6. Warning: hooks are mounted (and initialized) in a tree format, matching your react tree abstract. Hooks can then do PubSub, which is a network of connections.
+6. Warning: hooks are mounted (and initialized) in a tree format, matching your react tree abstract. PubSub done within hooks, are a graph of connections.
 
-7. The react abstract purposefully makes the componenent lifecycle be based on a series of declarations. (What to do when.) The react hook replaces these declarations, but you need to make sure to:
+7. The react abstraction makes the componenent lifecycle be based on a series of declarations. (What to do when.) The react hook replaces these declarations, but you need to make sure to:
     * utilize the useEffect() hook with the cleanup() function, to handle mounting and unmounting.
     * be mindful to avoid PubSub cycles. (yeah duh.)
     * keep in mind that the hook state changes will trigger a re-render in the components in which they are used, whenever the state changes (e.g. by a PubSub event).
-    * as such, the react render tree + the PubSub networked connections may themselves create a cycle. (okay...I feel dumb now. oops.)
+    * as such, the react render tree + the PubSub graph connections may themselves create a cycle. (oops.)
 
 8. If you are managing hook state via a PubSub network, then I recomend figuring out your dependency flow for the state first before dev'ing (e.g. mine was `World -> Robots -> Robot -> UiRobot`). Then keep in mind this dependency chain when building the hooks and their PubSub connections.
 
 9. Try to avoid having more than one interconnected (PubSub connected) hook per component.
 
-Overall, using only state in react hooks + PubSub (without a centralized store) was an interesting concept. The benefits are: (1) use macrotasks (not microtacks) to avoid event loop blockage, (2) to enforce state remains external to render components, and (3) set your state updates as independent watchers (i.e. PubSub and `useEffect()`).
+Overall, using only state in react hooks + PubSub (without any centralized store) was an interesting concept. The benefits are: (1) use macrotasks (not microtacks) to avoid event loop blockage, (2) to enforce state remains external to render components, and (3) set your state updates as independent watchers (i.e. PubSub and `useEffect()`).
 
-The biggest complexity that is introduced, (if using only PubSub to manage state connections), is keeping in mind both the react DOM tree and the PubSub network. Map those together in your mind.
+The biggest complexity that is introduced, (if using only PubSub to manage state connections), is keeping in mind both the react DOM tree and the PubSub graph.
 
 
 ### Approach #3: Managing state with react hooks connected to a centralized redux tree.
 
-This approach is to combine the functional components with all state in external hooks, plus the intentional use of a centralized data store via the `useReducer()` hook. The serialization point and src of truth flows out of the centralizied store.
+This approach is to combine the functional components with all state in external hooks, plus the intentional use of a centralized data store via the `useReducer()` hook. The serialization point and src of truth flows out of the centralized store.
 
-I haven't done this one yet, but have some opinions on how this approach will work out. The react hook initiation will still be tried to the DOM structure (because when it mounts), but you will no longer have to thin about keeping a distributed state (across all the hooks) in sync via a PubSub network. Instead, all the state is centralized in react.
+I haven't done this one yet, but have some opinions on how this approach will work out. The react hook init will still be tied to the DOM tree structure (i.e. when it mounts), but you will no longer have to think about keeping a distributed state (across all the hooks + PubSub) in sync via a graph + tree connections. Instead, all the state is centralized.
 
-With this scenario, I would likely keep most of the state management within the redux ecosystem, and not the PubSub. I really the atomicity of redux-sagas, which make sure that we do not need to think about serialization. (The state update watchers + error handling rollbacks should make the atomic updates.) But I would need to see how in practice those two parts play together.
+With this scenario, I would likely keep most of the state management within the redux ecosystem, and not the PubSub. I really like the atomicity of redux-sagas, which make sure that we do not need to think about serialization of state updates. Making concurrency easier. But I still need to see (in practice) how those two parts play together.
 
 
 ## Design choices
