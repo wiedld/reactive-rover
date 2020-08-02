@@ -44,7 +44,7 @@ const RobotUI = injectSheet(styles)(({
        // @ts-ignore
         offsetF = robot.offset;
    } else {
-        const [offset, setOffset] = buildUiRobot(robot, findOffsetFromLocation(robot._location));
+        const [offset, _] = buildUiRobot(robot, findOffsetFromLocation(robot._location));
         offsetF = offset;
    }
 
