@@ -4,6 +4,15 @@ The wandering Mars Rover. Started as a coding challenge (to do OOP style). That 
 
 Then people kept asking about react hooks. Since I had already used other attempts to cleanly manage side effects (see Approach #1 below), I understood the need and therefore decided to play with hooks.
 
+### To run:
+
+Frontend only interactivity:
+1. be in client dir
+2. `npm i`
+3. `npm run build:dev`
+4. `npm run start:dev`
+5. has hot reloading
+
 
 ## Managing a centralized source of truth
 
@@ -24,7 +33,7 @@ This repo is an experiment in managing state without a centralized source. (See 
 
 First time using react hooks. It seems that there are a few key concepts to keep in mind when planning for state management.
 
-#### Approach #1: Redux as a central source of truth
+### Approach #1: Redux as a central source of truth
 
 Pre-hook world traditionally used a centralized redux tree, and all unidirection flow from this tree (into the unidirection react rendering) could be done as follows:
 
@@ -37,7 +46,7 @@ Pre-hook world traditionally used a centralized redux tree, and all unidirection
 This ^^ was my previous go-to method. (Plus being careful of 3rd party UI libs with internal state.)
 
 
-#### Approach #2: Managing all state through react hooks (no centralization).
+### Approach #2: Managing all state through react hooks (no centralization).
 
 Key concepts to keep in mind:
 
@@ -68,7 +77,7 @@ Overall, using only state in react hooks + PubSub (without a centralized store) 
 The biggest complexity that is introduced, (if using only PubSub to manage state connections), is keeping in mind both the react DOM tree and the PubSub network. Map those together in your mind.
 
 
-#### Approach #3: Managing state with react hooks connected to a centralized redux tree.
+### Approach #3: Managing state with react hooks connected to a centralized redux tree.
 
 This approach is to combine the functional components with all state in external hooks, plus the intentional use of a centralized data store via the `useReducer()` hook. The serialization point and src of truth flows out of the centralizied store.
 
@@ -98,4 +107,10 @@ Dependency flow = `World -> Robots -> Robot -> UiRobot`:
 * &#9829; wall-e
 
 * free icons sourced from: https://www.flaticon.com/authors/vitaly-gorbachev and https://dribbble.com/iblowyourdesign 
+
+
+## TODO:
+* rover releases an error code when it cannot reach destination (because hazards etc). pipe into the UI. (decide where.)
+* used `noImplicitAny` in the tsconfig. But that means I have 21 instances of `// @ts-ignore`. Sure I can eliminate those...just running short on time atm.
+* build out node.js server
 
