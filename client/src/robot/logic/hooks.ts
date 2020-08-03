@@ -34,6 +34,8 @@ export function buildRobot (world: PhysicalWorld): BuildRobotFnReturn {
                 PubSub.publish(EventType.DeactivateRobot, robot);
                 // @ts-ignore
                 PubSub.unsubscribe(EventType.RobotMove, robot.id);
+
+                PubSub.publish(EventType.Stdout, "Created Robot");
             }
 
             // make new robot.
@@ -57,14 +59,9 @@ export function buildRobot (world: PhysicalWorld): BuildRobotFnReturn {
             if (robot == null) return;
 
             const cb = (r: RobotType) => PubSub.publish(EventType.RobotMove, r);
-            try {
-                // @ts-ignore
-                robot.moveTo(loc, false, cb);
-            } catch (e) {
-                console.log('ERROR: bad move');
-                robot && cb(robot);
-                // FIXME: post message to console.
-            }
+            // @ts-ignore
+            const status = robot.moveTo(loc, false, cb);
+            PubSub.publish(EventType.Stdout, JSON.stringify(status.status));
         },
         [robot],
       );

@@ -22,5 +22,9 @@ export const styles = {
     },
     button: {
         backgroundColor: '#B9D9EB'
+    },
+    text: {
+        minHeight: '50px',
+        fontSize: '1.5vw'
     }
 };

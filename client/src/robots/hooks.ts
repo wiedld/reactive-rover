@@ -76,6 +76,7 @@ export function buildRobotQueue (): buildRobotQueueFnReturn {
     const resetAll = useCallback(
         () => {
             PubSub.publish(EventType.EmptyRobotQueue, null);
+            PubSub.publish(EventType.Stdout, "Robots have discovered the spaceport, and departed Mars.");
         }, []
     );
 

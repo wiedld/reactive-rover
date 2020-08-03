@@ -9,10 +9,11 @@ export enum EventType {
     RemoveRobot = "remove-robot",
     RobotMove = 'robot-move',
     EmptyRobotQueue = "empty-robot-queue",
-    WindowResize = 'window-resize'
+    WindowResize = 'window-resize',
+    Stdout = "stdout"
 };
 
-type info = PhysicalWorld | RobotType | UiRobotType | null;
+type info = PhysicalWorld | RobotType | UiRobotType | string | null ;
 type SubFn = (arg: info) => void;
 export type RemoveFn = () => void;
 

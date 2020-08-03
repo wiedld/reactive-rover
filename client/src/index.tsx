@@ -7,6 +7,7 @@ import Grid from './grid';
 import { ControlsForWorld as ControlPanel } from './control-panel';
 import { PORTAL_ID as robotControls } from './control-panel/panels/for-robot';
 import { PORTAL_ID as allRobotsControls } from './control-panel/panels/for-robots';
+import StdoutFeed from "./control-panel/panels/for-stdout";
 import { useWorld } from './world/hooks';
 
 const styles = {
@@ -39,6 +40,7 @@ const App = injectSheet(styles)(({
                 <ControlPanel newWorld={newWorld} />
                 <div id={robotControls} />
                 <div id={allRobotsControls} />
+                <StdoutFeed />
             </div>
         </div>
     );
