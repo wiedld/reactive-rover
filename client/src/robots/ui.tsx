@@ -1,6 +1,5 @@
 import React from 'react';
 import injectSheet, { WithStylesProps } from 'react-jss';
-import classNames from 'classnames';
 import { buildRobotQueue } from "./hooks";
 import PhysicalWorld from "../world";
 import RobotUI from "../robot/ui";
@@ -19,7 +18,6 @@ export type StyledProps = WithStylesProps<typeof styles> & RobotQueue;
 
 const RobotQueue = injectSheet(styles)(({
     world,
-    ...props
 }: StyledProps) => {
     const [allRobots, activeRobot, resetAll, createRobot] = buildRobotQueue();
 
@@ -40,9 +38,7 @@ const RobotQueue = injectSheet(styles)(({
             {/* Active robot. */}
             <Robot world={world} />
             <ControlRobotQueuePanel
-                // @ts-ignore
                 newRobot={createRobot}
-                // @ts-ignore
                 resetAll={resetAll}
             />
         </React.Fragment>

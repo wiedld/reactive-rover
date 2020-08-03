@@ -1,4 +1,4 @@
-import { Terrian, World } from '../src/global-types';
+import { Terrian } from '../src/global-types';
 
 export const WORLD = [
         [Terrian.P, Terrian.P, Terrian.P, Terrian.C, Terrian.P],

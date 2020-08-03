@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import injectSheet, { WithStylesProps } from 'react-jss';
-import classNames from 'classnames';
 import { styles } from "../styles"
 
 interface Props {

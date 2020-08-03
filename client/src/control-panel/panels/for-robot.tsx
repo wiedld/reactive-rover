@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import injectSheet, { WithStylesProps } from 'react-jss';
-import classNames from 'classnames';
 import { Location } from '../../global-types';
 import { styles } from "../styles";
 
@@ -19,7 +18,6 @@ export default injectSheet(styles)(({
     disabled,
     maxLoc,
     moveToLoc,
-    ...props
 }: StyledProps) => {
 
     const [x, setX] = useState(1);

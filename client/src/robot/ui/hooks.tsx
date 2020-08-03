@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
+import { useState, useEffect } from 'react';
 import { buildTileId } from '../../tile/utils';
-import { Location, Direction, Dispatch } from '../../global-types';
 import { RobotType } from '../types';
 import PubSub, { EventType } from '../../pub-sub';
 import { DEFAULT_LOCATION, findOffsetFromLocation } from "../utils";
@@ -19,7 +17,7 @@ export interface UIoffsetType {
     left: number;
 }
 
-type buildUiRobotFnReturn = [UIoffsetType, Dispatch];
+type buildUiRobotFnReturn = [UIoffsetType];
 
 /* This function is called whenever a new robot is created.
     RobotUI is downstream of the Robot.
@@ -30,14 +28,11 @@ export function buildUiRobot (robot: RobotType, init: UIoffsetType): buildUiRobo
   useEffect(() => {
     // @ts-ignore
     PubSub.subscribe(EventType.RobotMove, robot.id, (r: RobotType) => renderInUI(r));
-
     // @ts-ignore
     PubSub.subscribe(EventType.RemoveRobot, robot.id, (r: RobotType) => removeFromUI(r));
 
-    // @ts-ignore
     PubSub.subscribe(EventType.WindowResize, robot.id, () => {
-      // @ts-ignore
-      if (robot.offset == undefined)
+      if (!robot.hasOwnProperty('offset'))
         setOffset(findOffsetFromLocation(robot.location));
     }); 
 
@@ -69,5 +64,5 @@ export function buildUiRobot (robot: RobotType, init: UIoffsetType): buildUiRobo
     r?.removeFromWorld && r.removeFromWorld();
   }
 
-  return [offset, setOffset];
+  return [offset];
 }

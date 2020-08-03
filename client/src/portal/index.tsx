@@ -1,11 +1,11 @@
-import React, { Component } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 
 interface Props {
     portalId: string;
 }
 
-export default class extends Component<Props> {
+export default class extends React.Component<Props> {
     el: Element;
 
     constructor (props: Props) {
