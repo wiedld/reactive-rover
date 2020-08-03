@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import { buildUiRobot, getDefaultOffset, UIoffsetType } from "./hooks";
 import { UiRobotType, RobotType } from "../types";
 import { findOffsetFromLocation } from "../utils";
-// @ts-ignore
 import RobotIcon from '../../../public/wall-e.png';
 
 interface RobotUIProps {

@@ -51,7 +51,6 @@ export function buildRobotQueue (): buildRobotQueueFnReturn {
             setActiveRobot(null);
         });
 
-        // @ts-ignore
         PubSub.subscribe(EventType.WindowResize, queueID, () => {
             const update: Queue = {};
             Object.keys(queue).forEach(rId => {

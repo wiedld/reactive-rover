@@ -113,6 +113,6 @@ Dependency flow = `World -> Robots -> Robot -> UiRobot`:
 
 ## TODO:
 * rover releases an error code when it cannot reach destination (because hazards etc). pipe into the UI. (decide where.)
-* used `noImplicitAny` in the tsconfig. But that means I have 21 instances of `// @ts-ignore`. Sure I can eliminate those...just running short on time atm.
+* used `noImplicitAny` in the tsconfig. But that means I have 11 instances of `// @ts-ignore`. Most are from my use of DRY (e.g. the PubSub, RobotType vs UIRobotType), which don't play well with typescript mixins + union types. Are fixable...will get around to it.
 * build out node.js server
 

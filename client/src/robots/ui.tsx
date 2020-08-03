@@ -40,9 +40,7 @@ const RobotQueue = injectSheet(styles)(({
             {/* Active robot. */}
             <Robot world={world} />
             <ControlRobotQueuePanel
-                // @ts-ignore
                 newRobot={createRobot}
-                // @ts-ignore
                 resetAll={resetAll}
             />
         </React.Fragment>

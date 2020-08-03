@@ -33,7 +33,6 @@ const Robot = injectSheet(styles)(({
             <ControlPanel
                 disabled={robot == null}
                 maxLoc={world.worldMap.length}
-                // @ts-ignore
                 moveToLoc={moveToLoc}
             />
         </React.Fragment>

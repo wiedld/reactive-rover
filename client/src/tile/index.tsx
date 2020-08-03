@@ -3,9 +3,7 @@ import injectSheet, { WithStylesProps } from 'react-jss';
 import classNames from 'classnames';
 import { Location, Terrian } from '../global-types';
 import { buildTileId } from './utils';
-// @ts-ignore
 import Canyon from '../../public/canyon-1.svg';
-// @ts-ignore
 import Mountain from '../../public/mountains.svg';
 
 

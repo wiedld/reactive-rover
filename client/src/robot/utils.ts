@@ -10,7 +10,6 @@ export const createDefaultRobot: CreateDefaultRobotFun = (
     physicalWorld,
     location = DEFAULT_LOCATION,
     direction = 'N'
-    // @ts-ignore
 ) => new Robot({ physicalWorld, location, direction });
 
 export const DEFAULT_LOCATION: Location = [0,0];

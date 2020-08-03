@@ -30,14 +30,11 @@ export function buildUiRobot (robot: RobotType, init: UIoffsetType): buildUiRobo
   useEffect(() => {
     // @ts-ignore
     PubSub.subscribe(EventType.RobotMove, robot.id, (r: RobotType) => renderInUI(r));
-
     // @ts-ignore
     PubSub.subscribe(EventType.RemoveRobot, robot.id, (r: RobotType) => removeFromUI(r));
 
-    // @ts-ignore
     PubSub.subscribe(EventType.WindowResize, robot.id, () => {
-      // @ts-ignore
-      if (robot.offset == undefined)
+      if (!robot.hasOwnProperty('offset'))
         setOffset(findOffsetFromLocation(robot.location));
     }); 
 
