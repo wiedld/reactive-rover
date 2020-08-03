@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import injectSheet, { WithStylesProps } from 'react-jss';
-import classNames from 'classnames';
 import { styles } from "../../styles"
 import { stdoutFeed } from "./hooks";
 

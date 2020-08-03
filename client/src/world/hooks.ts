@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PhysicalWorld from '../world';
 import PubSub, { EventType } from '../pub-sub';
 

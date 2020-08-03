@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import injectSheet, { WithStylesProps } from 'react-jss';
-import classNames from 'classnames';
 import { styles } from "../styles";
 
 export const PORTAL_ID = "control-all-robots";

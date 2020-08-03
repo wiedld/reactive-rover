@@ -1,6 +1,5 @@
 import React from 'react';
 import injectSheet, { WithStylesProps } from 'react-jss';
-import classNames from 'classnames';
 import RobotUI from './ui';
 import { buildRobot } from './logic/hooks';
 import PhysicalWorld from '../world';
@@ -21,9 +20,7 @@ export type StyledProps = WithStylesProps<typeof styles> & RobotProps;
     As such, the last robot created, is the one under control.
 */
 const Robot = injectSheet(styles)(({
-    classes,
     world,
-    ...props
 }: StyledProps) => {
     const [robot, moveToLoc] = buildRobot(world);
 

@@ -4,14 +4,6 @@ import PhysicalWorld from '../../world';
 
 const STATUS_CODES = ['OK', 'OBSTACLE', 'INVALID_COMMAND'];
 
-function sleep(milliseconds: number) {
-    const date = Date.now();
-    let currentDate = null;
-    do {
-      currentDate = Date.now();
-    } while (currentDate - date < milliseconds);
-  }
-
 export interface Props {
     physicalWorld: PhysicalWorld;
     location: Location;
@@ -158,7 +150,7 @@ class Robot {
                 - note: physical exploration will backtrack over known terrian
                     --> recursive call to the pre-planning path.
     */
-    moveTo (location: Location, prePlan = false, cb = (a:Robot)=>{}, knownWorld = this._physicalWorld.worldMap) {
+    moveTo (location: Location, prePlan = false, cb = (_:Robot)=>{}, knownWorld = this._physicalWorld.worldMap) {
         try {
             if (prePlan) {
                 this.command(this._buildPlan(location, knownWorld))
@@ -304,7 +296,6 @@ class Robot {
                 const { toVisitKey, nextLoc } = options.sort((a,b) => a < b ? -1 : 1)
                     .reduce((acc, nodeToGoal) => {
                         toVisit[nodeToGoal].forEach(locN => {
-                            let [x,y] = locN;
                             const totalCost = calcCost(locN, loc);
                             if (acc.minCost > totalCost) {
                                 acc.minCost = totalCost;

@@ -1,9 +1,6 @@
-import React, { FunctionComponent} from "react";
-import ReactDOM from "react-dom";
-import { WithStylesProps } from 'react-jss';
+import React from "react";
 import PortalWrapper from "../portal";
 import { AnyProps, AnyComponent } from "./types";
-import { styles } from "./styles";
 
 type WrappedComponent = AnyComponent;
 
