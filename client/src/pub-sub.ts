@@ -9,19 +9,20 @@ export enum EventType {
     RemoveRobot = "remove-robot",
     RobotMove = 'robot-move',
     EmptyRobotQueue = "empty-robot-queue",
-    WindowResize = 'window-resize'
+    WindowResize = 'window-resize',
+    Stdout = "stdout"
 };
 
-type info = PhysicalWorld | RobotType | UiRobotType | null;
-type SubFn = (arg: info) => void;
+type T = PhysicalWorld | RobotType | UiRobotType | string | null;
+export type SubFnT = (arg: T) => void;
 export type RemoveFn = () => void;
 
 export default (function(){
-    const topics: { [k: string]: { [id: string]: SubFn } } = {};
+    const topics: { [k: string]: { [id: string]: SubFnT } } = {};
     const hOP = topics.hasOwnProperty;
   
     return {
-        subscribe: function(topic: EventType, id: string, listener: SubFn): RemoveFn {
+        subscribe: function(topic: EventType, id: string, listener: SubFnT): RemoveFn {
             if(!hOP.call(topics, topic))
                 topics[topic] = {};
     
@@ -42,7 +43,7 @@ export default (function(){
             delete topics[topic];
         },
 
-        publish: function(topic: EventType, info: info) {
+        publish: function(topic: EventType, info: T) {
             if(!hOP.call(topics, topic)) return;
     
             Object.keys(topics[topic]).forEach(id => {

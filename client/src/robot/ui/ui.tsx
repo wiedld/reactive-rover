@@ -1,10 +1,8 @@
 import React from 'react';
 import injectSheet, { WithStylesProps } from 'react-jss';
-import classNames from 'classnames';
-import { buildUiRobot, getDefaultOffset, UIoffsetType } from "./hooks";
+import { buildUiRobot, UIoffsetType } from "./hooks";
 import { UiRobotType, RobotType } from "../types";
 import { findOffsetFromLocation } from "../utils";
-// @ts-ignore
 import RobotIcon from '../../../public/wall-e.png';
 
 interface RobotUIProps {
@@ -44,7 +42,7 @@ const RobotUI = injectSheet(styles)(({
        // @ts-ignore
         offsetF = robot.offset;
    } else {
-        const [offset, _] = buildUiRobot(robot, findOffsetFromLocation(robot._location));
+        const [offset] = buildUiRobot(robot, findOffsetFromLocation(robot._location));
         offsetF = offset;
    }
 

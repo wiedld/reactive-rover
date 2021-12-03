@@ -1,6 +1,5 @@
-import React, { Component, FunctionComponent } from 'react';
+import React from 'react';
 import injectSheet, { WithStylesProps } from 'react-jss';
-import classNames from 'classnames';
 
 interface ColProps {
     order: number

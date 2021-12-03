@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 import injectSheet, { WithStylesProps } from 'react-jss';
-import classNames from 'classnames';
 import Row from '../row';
 import Col from '../col';
 import Tile from '../tile';
